@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SEU Timetable</string>
+    <string name="disclaimer_title">服务协议与免责声明</string>
+    <string name="disclaimer_content">
+        欢迎使用 SEUTimetable。在开始使用前，请务必阅读并理解以下条款：\n\n
+        1. 数据用途：本软件仅提供课表展示与管理功能。您的教务处登录凭证及抓取的课程数据仅保存在您的手机本地，软件不会上传、转存或分享您的任何个人隐私数据。\n\n
+        2. 非官方身份：本软件为开源个人项目，并非东南大学（SEU）官方发布的客户端。\n\n
+        3. 抓取风险：本软件通过模拟浏览器行为获取课表，提取过程受学校系统稳定性影响。因教务系统维护、改版或网络波动导致的导入失败、数据缺失或错误，本软件不承担任何责任。\n\n
+        4. 用户义务：请务必以教务处官方系统信息为准进行教务活动。用户因过度依赖本软件信息而导致的误课、缺考或其他损失，开发者不承担法律责任。\n\n
+        5. 开源授权：本项目基于 Apache 2.0 协议开源。您可以自由下载或参与开发，但请在法律允许的范围内使用。\n\n
+        点击“同意”即代表您已阅读并接受上述条款。
+    </string>
+    <string name="accept_and_continue">同意并继续</string>
+    <string name="decline_and_exit">拒绝并退出</string>
+    <string name="timetable">课程表</string>
+    <string name="news">资讯</string>
+    <string name="me">我</string>
+    <string name="current_week">第 %d 周</string>
+    <string name="period_index">第 %d 节</string>
+    <string name="last_week">上一周</string>
+    <string name="next_week">下一周</string>
+    <string name="manage_timetable">管理课表</string>
+    <string name="end_of_info">— 已经到底部了 —</string>
+    <string name="back">返回</string>
+    <string name="add_new_course">新建课程</string>
+    <string name="time_conflict">时间冲突</string>
+    <string name="save">保存</string>
+    <string name="course_name">课程名称</string>
+    <string name="teacher">教师</string>
+    <string name="place">地点</string>
+    <string name="class_time">上课时间</string>
+    <string name="course_already_existed_during_this_period">该时段已存在课程: %1$s</string>
+    <string name="weekly_repetition_rules">重复规则</string>
+    <string name="customize">自定义</string>
+    <string name="display_color">显示颜色</string>
+    <string name="notes">备注</string>
+    <string name="notes_hint">选修课、考试提醒等…</string>
+    <string name="select_class_weeks">选择上课周数</string>
+    <string name="clear">清空</string>
+    <string name="import_from">从教务处导入</string>
+    <string name="auto_import">自动抓取东南大学教务系统课表</string>
+    <string name="add_single_course">新建单个课程</string>
+    <string name="add_manually">手动添加一门非教务处课程</string>
+    <string name="switch_timetable">切换当前课表</string>
+    <string name="switch_between">在不同的学期或多份课表间切换</string>
+    <string name="create_a_blank_timetable">新建空白课表</string>
+    <string name="plan_from_scratch">从零开始规划你的日程</string>
+    <string name="no_timetables_yet">还没有课表哦</string>
+    <string name="import_timetable">导入课表</string>
+    <string name="starting_period">起始节次</string>
+    <string name="lasting_periods">持续节数</string>
+    <string name="every_week">每周</string>
+    <string name="odd_week">单周</string>
+    <string name="even_week">双周</string>
+    <string name="week_number">周次</string>
+    <string name="edit_course">编辑课程</string>
+    <string name="custom_weeks_format">第 %1$s 周</string>
+    <string name="period_number">节次</string>
+    <string name="custom_periods_format">%1$s / %2$d-%3$d 节</string>
+    <string name="delete">删除</string>
+    <string name="create_a_table_name">为你的新课表起个名字，例如“2025 春季学期”</string>
+    <string name="timetable_name">课表名称</string>
+    <string name="type_name">输入名称…</string>
+    <string name="name_cannot_be_empty">名称不能为空</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="select_all">全选</string>
+    <string name="currently_using">当前课表</string>
+    <string name="week_starting_date">%1$d 周 · %2$s</string>
+    <string name="operating_menu">操作菜单</string>
+    <string name="delete_table_warning">确定要删除课表 \"%1$s\" 吗？此操作将永久删除该课表下的所有课程，且无法撤销。</string>
+    <string name="delete_course">删除课程</string>
+    <string name="delete_course_warning">确定要从课表中移除 \"%1$s\" 吗？</string>
+    <string name="show_weekends">显示周末</string>
+    <string name="total_week_number">%1$d 周</string>
+    <string name="week_number_in_a_semester">学期周数</string>
+    <string name="school_start_date">开学日期 (第一周周一)</string>
+    <string name="top">回到顶部</string>
+    <string name="delete_timetable">删除课表</string>
+    <string name="delete_permanently">永久删除课表</string>
+    <string name="delete_permanently_warning">该操作不可撤回！</string>
+    <string name="add">新增</string>
+    <string name="schedule">节次时间表</string>
+    <string name="nth_class">第 %1$d 节</string>
+    <string name="time_conflict_warning">时间设置冲突：请检查红色标记的节次。</string>
+    <string name="sub">减</string>
+    <string name="plus">加</string>
+    <string name="not_specified">未指定</string>
+    <string name="location_not_specified">未指定地点</string>
+    <string name="teacher_not_specified">未指定老师</string>
+    <string name="no_weeks_selected">未选择星期</string>
+    <string name="click_me_when_you_see_the_timetable">看到课表后点我导入</string>
+    <string name="edit_semester_config">编辑课表配置</string>
+    <string name="extracting_timetable">正在提取课表……</string>
+    <string name="login_title">登录东南大学教务处</string>
+    <string name="period_count_too_small_warning">警告：当前设置的总节数 (%1$d) 小于已选课程的最大节次 (%2$d)。超出部分的课程将被隐藏！</string>
+    <string name="edit_config_hint">修改周数、节次时间及开学日期</string>
+    <string name="one_week_at_least">请至少选择一周</string>
+    <string name="course_conflict_format">%1$s 以及其他 %2$d 门课程</string>
+    <string name="import_failed">导入失败: %1$s</string>
+    <string name="widget_week_desc">本周课程</string>
+    <string name="no_courses_today">今天没有课，休息一下</string>
+    <string name="section_format">%1$d-%2$d节</string>
+    <string name="widget_today_desc">今日课程</string>
+    <string name="no_shortcut_for_creating_widgets">您的桌面不支持快捷添加小组件</string>
+    <string name="add_to_launcher">添加今日课程小组件到桌面</string>
+    <string name="add_to_launcher_hint">如果点击后在桌面没看到小组件，那么你可能需要手动在设置中授予\"桌面快捷方式\"的权限</string>
+    <string name="table_name_cannot_be_empty">课表名不能为空</string>
+    <string name="reduce_weeks_warning">缩小周数可能导致部分课程被截断不可见</string>
+    <string name="extend_weeks_warning">增大周数会改变“每周/单双周”课程的覆盖范围</string>
+</resources>

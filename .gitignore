@@ -1,0 +1,30 @@
+# --- Android ---
+build/
+*.apk
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+
+# --- Kotlin ---
+.kotlin/
+kotlin-daemon-embeddable-*.jar
+
+# --- IntelliJ/Android Studio ---
+.idea/
+*.iml
+.gradle/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+cmake/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Secrets ---
+*.jks
+*.keystore

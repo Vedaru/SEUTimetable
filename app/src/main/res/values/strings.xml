@@ -1,0 +1,111 @@
+<resources>
+    <string name="app_name">SEU Timetable</string>
+    <string name="disclaimer_title">Terms of Service &amp; Disclaimer</string>
+    <string name="disclaimer_content">
+        Welcome to SEUTimetable. Before you proceed, please read and understand the following terms:\n\n
+        1. Data Usage: This app provides timetable management features only. Your login credentials and fetched course data are **stored locally on your device**. The app does not upload, transfer, or share your personal privacy data with any third-party servers.\n\n
+        2. Non-Official Status: This is an open-source personal project and is **NOT** an official client published by Southeast University (SEU).\n\n
+        3. Scraping Risks: The app retrieves data by simulating browser behavior. The extraction process depends on the stability of the university\'s system. The developers are not responsible for import failures, missing data, or errors caused by system maintenance, updates, or network issues.\n\n
+        4. User Responsibility: Please refer to the official Educational Administration System for authoritative information. The developers shall not be held liable for missed classes, exams, or any other losses resulting from reliance on this app.\n\n
+        5. Open Source License: This project is licensed under the Apache License 2.0. You are free to download or contribute, provided you use it within the scope of laws and university regulations.\n\n
+        By clicking \"Accept\", you acknowledge that you have read and accepted these terms.
+    </string>
+    <string name="accept_and_continue">Accept and Continue</string>
+    <string name="decline_and_exit">Decline and Exit</string>
+    <string name="timetable">Timetable</string>
+    <string name="news">News</string>
+    <string name="me">Me</string>
+    <string name="current_week">Week %d</string>
+    <string name="period_index">Period %d</string>
+    <string name="last_week">Last week</string>
+    <string name="next_week">Next week</string>
+    <string name="back">Back</string>
+    <string name="add_new_course">Add a new course</string>
+    <string name="time_conflict">Time Conflict</string>
+    <string name="save">Save</string>
+    <string name="course_name">Course Name</string>
+    <string name="teacher">Teacher</string>
+    <string name="place">Place</string>
+    <string name="class_time">Class Time</string>
+    <string name="course_already_existed_during_this_period">The following course already exists during this period: %1$s</string>
+    <string name="weekly_repetition_rules">Weekly Repetition Rules</string>
+    <string name="customize">Customize</string>
+    <string name="display_color">Display Color</string>
+    <string name="notes">Notes</string>
+    <string name="notes_hint">Elective courses, exam reminders, etc.</string>
+    <string name="select_class_weeks">Select class weeks</string>
+    <string name="clear">Clear</string>
+    <string name="manage_timetable">Manage Timetables</string>
+    <string name="end_of_info">-- The End --</string>
+    <string name="import_from">Import from the AAO</string>
+    <string name="auto_import">Automatically import timetables from SEU\'s academic affairs system</string>
+    <string name="add_single_course">Add a single course</string>
+    <string name="add_manually">Manually add a course that is not offered by the AAO</string>
+    <string name="switch_timetable">Switch current timetable</string>
+    <string name="switch_between">Switch between different semesters or multiple timetables</string>
+    <string name="create_a_blank_timetable">Create a blank timetable</string>
+    <string name="plan_from_scratch">Plan your schedule from scratch</string>
+    <string name="no_timetables_yet">No timetables yet</string>
+    <string name="import_timetable">Import a timetable</string>
+    <string name="starting_period">Starting Period</string>
+    <string name="lasting_periods">Lasting Periods</string>
+    <string name="every_week">Weekly</string>
+    <string name="odd_week">Odd week</string>
+    <string name="even_week">Even week</string>
+    <string name="week_number">Week</string>
+    <string name="edit_course">Edit Course</string>
+    <string name="custom_weeks_format">Week %1$s</string>
+    <string name="period_number">Period</string>
+    <string name="custom_periods_format">%1$s / Period %2$d-%3$d</string>
+    <string name="delete">Delete</string>
+    <string name="timetable_name">Timetable Name</string>
+    <string name="type_name">Type name…</string>
+    <string name="name_cannot_be_empty">Name cannot be empty</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_all">Select All</string>
+    <string name="currently_using">Current timetable</string>
+    <string name="delete_timetable">Delete timetable</string>
+    <string name="delete_permanently">Delete timetable permanently</string>
+    <string name="week_starting_date">%1$d weeks · %2$s</string>
+    <string name="operating_menu">Operating Menu</string>
+    <string name="top">Top</string>
+    <string name="delete_permanently_warning">The operation cannot be undone!</string>
+    <string name="create_a_table_name">Give your new timetable a name, such as \"Spring Semester 2025\".</string>
+    <string name="delete_table_warning">Are you sure you want to delete the timetable \"%1$s\"? This operation will permanently delete all courses under this timetable and cannot be undone.</string>
+    <string name="delete_course">Delete Course</string>
+    <string name="delete_course_warning">Are you sure you want to delete \"%1$s\" from the timetable?</string>
+    <string name="show_weekends">Show Weekends</string>
+    <string name="total_week_number">%1$d weeks</string>
+    <string name="week_number_in_a_semester">Number of weeks</string>
+    <string name="school_start_date">Date of the first Monday</string>
+    <string name="add">Add</string>
+    <string name="schedule">Schedule</string>
+    <string name="nth_class">Section %1$d</string>
+    <string name="time_conflict_warning">Time setting conflict: Please check the sections marked in red.</string>
+    <string name="sub">Sub</string>
+    <string name="plus">Plus</string>
+    <string name="not_specified">Not Specified</string>
+    <string name="location_not_specified">Location Not Specified</string>
+    <string name="teacher_not_specified">Teacher Not Specified</string>
+    <string name="no_weeks_selected">No weeks selected</string>
+    <string name="click_me_when_you_see_the_timetable">Click me when you see the timetable</string>
+    <string name="edit_semester_config">Edit Semester Config</string>
+    <string name="extracting_timetable">Extracting timetable…</string>
+    <string name="login_title">Login to the SEU AAO</string>
+    <string name="period_count_too_small_warning">Warning: The current total number of sessions (%1$d) is less than the maximum number of sessions selected (%2$d). Courses exceeding this limit will be hidden!</string>
+    <string name="edit_config_hint">Modify week number, period time, and start date of school</string>
+    <string name="one_week_at_least">Please select at least one week</string>
+    <string name="course_conflict_format">%1$s and %2$d more</string>
+    <string name="import_failed">Import Failed: %1$s</string>
+    <string name="widget_today_desc">Courses today</string>
+    <string name="widget_week_desc">Courses for this week</string>
+    <string name="no_courses_today">No courses today. Have a relax.</string>
+    <string name="section_format">Section %1$d-%2$d</string>
+    <string name="no_shortcut_for_creating_widgets">Your launcher does not support adding widgets via shortcuts.</string>
+    <string name="add_to_launcher_hint">If you don\'t see the widget on your desktop after clicking, you may need to manually grant \"desktop shortcut\" permissions in your settings</string>
+    <string name="add_to_launcher">Add Courses Today Widget to your home screen</string>
+    <string name="table_name_cannot_be_empty">Table name cannot be empty</string>
+    <string name="reduce_weeks_warning">Reducing the number of weeks may result in some courses being truncated and becoming unavailable</string>
+    <string name="extend_weeks_warning">Increasing the number of weeks will change the coverage of \"weekly/odd/even-week\" courses.</string>
+</resources>
