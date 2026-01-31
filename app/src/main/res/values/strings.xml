@@ -3,8 +3,8 @@
     <string name="disclaimer_title">Terms of Service &amp; Disclaimer</string>
     <string name="disclaimer_content">
         Welcome to SEUTimetable. Before you proceed, please read and understand the following terms:\n\n
-        1. Data Usage: This app provides timetable management features only. Your login credentials and fetched course data are **stored locally on your device**. The app does not upload, transfer, or share your personal privacy data with any third-party servers.\n\n
-        2. Non-Official Status: This is an open-source personal project and is **NOT** an official client published by Southeast University (SEU).\n\n
+        1. Data Usage: This app provides timetable management features only. Your login credentials and fetched course data are stored locally on your device. The app does not upload, transfer, or share your personal privacy data with any third-party servers.\n\n
+        2. Non-Official Status: This is an open-source personal project and is NOT an official client published by Southeast University (SEU).\n\n
         3. Scraping Risks: The app retrieves data by simulating browser behavior. The extraction process depends on the stability of the university\'s system. The developers are not responsible for import failures, missing data, or errors caused by system maintenance, updates, or network issues.\n\n
         4. User Responsibility: Please refer to the official Educational Administration System for authoritative information. The developers shall not be held liable for missed classes, exams, or any other losses resulting from reliance on this app.\n\n
         5. Open Source License: This project is licensed under the Apache License 2.0. You are free to download or contribute, provided you use it within the scope of laws and university regulations.\n\n
