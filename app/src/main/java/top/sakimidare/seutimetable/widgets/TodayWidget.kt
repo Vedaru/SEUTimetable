@@ -169,7 +169,6 @@ class TodayWidget : GlanceAppWidget() {
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .appWidgetBackground()
                 .background(GlanceTheme.colors.widgetBackground)
                 .cornerRadius(16.dp)
                 .padding(12.dp)
