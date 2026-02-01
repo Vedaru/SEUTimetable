@@ -71,7 +71,7 @@
     <string name="operating_menu">Operating Menu</string>
     <string name="top">Top</string>
     <string name="delete_permanently_warning">The operation cannot be undone!</string>
-    <string name="create_a_table_name">Give your new timetable a name, such as \"Spring Semester 2025\".</string>
+    <string name="create_a_table_name">Give your new timetable a name</string>
     <string name="delete_table_warning">Are you sure you want to delete the timetable \"%1$s\"? This operation will permanently delete all courses under this timetable and cannot be undone.</string>
     <string name="delete_course">Delete Course</string>
     <string name="delete_course_warning">Are you sure you want to delete \"%1$s\" from the timetable?</string>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SEU Timetable</string>
+    <string name="disclaimer_title">規約と免責事項</string>
+    <string name="disclaimer_content">
+        SEUTimetableへようこそ。ご利用の前に、以下の利用規約および免责事項を必ずご確認ください：
+        1. データ利用について： 本アプリはスケジュール管理機能のみを提供します。ログイン情報および取得した講義データは、すべてお客様のデバイス内にローカル保存されます。アプリがお客様の個人情報を外部サーバーへアップロード、転送、または第三者と共有することはありません。
+        2. 非公式アプリについて： 本アプリはオープンソースの個人プロジェクトであり、東南大学（SEU）が提供する公式クライアントではありません。
+        3. データ取得のリスク： 本アプリはブラウザの動作をシミュレートしてデータを取得します。そのため、データの抽出は大学システムの安定性に依存します。システムのメンテナンス、アップデート、またはネットワークの問題によるデータのインポート失敗、欠落、誤りについて、開発者は一切の責任を負いません。
+        4. 免責事項： 正確な情報については、必ず大学公式の教務システムを参照してください。本アプリの情報に依拠したことによる授業の欠席、試験の受け逃し、その他いかなる損害についても、開発者は責任を負いかねます。
+        5. オープンソースライセンス： 本プロジェクトは Apache License 2.0 に基づいてライセンスされています。法律および大学の規則の範囲内であれば、自由にダウンロードや貢献を行うことができます。
+        「同意する」をクリックすることで、お客様は本規約を読み、その内容に同意したものとみなされます。
+    </string>
+    <string name="accept_and_continue">同意する</string>
+    <string name="decline_and_exit">拒否する</string>
+    <string name="timetable">時間割</string>
+    <string name="news">ニュース</string>
+    <string name="me">マイ</string>
+    <string name="current_week">第 %d 週</string>
+    <string name="period_index">%d 限</string>
+    <string name="last_week">前の週</string>
+    <string name="next_week">次の週</string>
+    <string name="back">戻る</string>
+    <string name="add_new_course">コースを追加</string>
+    <string name="time_conflict">予定が重複</string>
+    <string name="save">保存する</string>
+    <string name="course_name">コース名</string>
+    <string name="teacher">担当教員</string>
+    <string name="place">場所</string>
+    <string name="class_time">授業時間</string>
+    <string name="course_already_existed_during_this_period">この時間帯には %1$s のコースが既に登録されています</string>
+    <string name="weekly_repetition_rules">繰り返し規則</string>
+    <string name="customize">カスタマイズ</string>
+    <string name="display_color">表示色</string>
+    <string name="notes">メモ</string>
+    <string name="notes_hint">選択科目、試験のリマインダーなど…</string>
+    <string name="select_class_weeks">実施週を選択</string>
+    <string name="clear">リセット</string>
+    <string name="manage_timetable">時間割管理</string>
+    <string name="end_of_info">— 以上です —</string>
+    <string name="import_from">教務課からインポート</string>
+    <string name="auto_import">東南大学の教務システムから時間割を自動取得します</string>
+    <string name="add_single_course">コースを個別追加</string>
+    <string name="add_manually">教務外のコースを手動で追加します</string>
+    <string name="switch_timetable">時間割の切り替え</string>
+    <string name="switch_between">学期ごと、または複数の時間割を切り替えます</string>
+    <string name="create_a_blank_timetable">時間割を新規作成</string>
+    <string name="plan_from_scratch">ゼロから、あなただけのスケジュールを</string>
+    <string name="no_timetables_yet">まだ時間割がないようです</string>
+    <string name="import_timetable">時間割をインポート</string>
+    <string name="starting_period">開始時限</string>
+    <string name="lasting_periods">コマ数</string>
+    <string name="every_week">毎週</string>
+    <string name="odd_week">奇数週</string>
+    <string name="even_week">偶数週</string>
+    <string name="week_number">週目</string>
+    <string name="edit_course">コースを編集</string>
+    <string name="custom_weeks_format">%1$s 週目</string>
+    <string name="period_number">時限目</string>
+    <string name="custom_periods_format">%1$s / %2$d-%3$d 限</string>
+    <string name="delete">削除</string>
+    <string name="timetable_name">時間割名</string>
+    <string name="type_name">名前を入力…</string>
+    <string name="name_cannot_be_empty">名前を入力してください</string>
+    <string name="confirm">OK</string>
+    <string name="cancel">キャンセル</string>
+    <string name="select_all">すべて選択</string>
+    <string name="currently_using">使用中</string>
+    <string name="delete_timetable">時間割を削除</string>
+    <string name="delete_permanently">時間割を完全に削除</string>
+    <string name="week_starting_date">全 %1$d 週 · %2$s</string>
+    <string name="operating_menu">メニュー</string>
+    <string name="top">トップへ</string>
+    <string name="delete_permanently_warning">元に戻すことはできません！</string>
+    <string name="create_a_table_name">新しい時間割の名前を入力してください</string>
+    <string name="delete_table_warning">時間割「%1$s」を削除しますか？この操作を実行すると、含まれるすべてのコースが永久に削除され、元に戻すことはできません。</string>
+    <string name="delete_course">コースを削除</string>
+    <string name="delete_course_warning">「%1$s」を時間割から削除しますか？</string>
+    <string name="show_weekends">土日を表示</string>
+    <string name="total_week_number">全 %1$d 周</string>
+    <string name="week_number_in_a_semester">学期の週数</string>
+    <string name="school_start_date">学期開始日 (月曜日)</string>
+    <string name="add">追加</string>
+    <string name="schedule">時限設定</string>
+    <string name="nth_class">第 %1$d 時限</string>
+    <string name="time_conflict_warning">時刻設定にエラーがあります。赤く表示された時限を確認してください。</string>
+    <string name="sub">マイナス</string>
+    <string name="plus">プラス</string>
+    <string name="not_specified">未設定</string>
+    <string name="location_not_specified">場所未設定</string>
+    <string name="teacher_not_specified">担当教員未設定</string>
+    <string name="no_weeks_selected">週を選択してください</string>
+    <string name="click_me_when_you_see_the_timetable">時間割が表示されたらここをタップ</string>
+    <string name="edit_semester_config">学期の設定を編集</string>
+    <string name="extracting_timetable">時間割を解析中……</string>
+    <string name="login_title">東南大学教務システムにログイン</string>
+    <string name="period_count_too_small_warning">警告：設定された総コマ数 (%1$d) が、登録済みコースの最大時限 (%2$d) を下回っています。超過したコースは表示されなくなります！</string>
+    <string name="edit_config_hint">週数、時限設定、および学期開始日を変更します</string>
+    <string name="one_week_at_least">少なくとも1つの週を選択してください</string>
+    <string name="course_conflict_format">%1$s 他 %2$d 件</string>
+    <string name="import_failed">インポート失敗: %1$s</string>
+    <string name="widget_today_desc">今日のコース</string>
+    <string name="widget_week_desc">今週のコース</string>
+    <string name="no_courses_today">今日はコースがありません。ゆっくり休みましょう！</string>
+    <string name="section_format">%1$d-%2$d限</string>
+    <string name="no_shortcut_for_creating_widgets">お使いのランチャーはウィジェットの追加に対応していません</string>
+    <string name="add_to_launcher_hint">ウィジェットが表示されない場合は、設定から「ホーム画面のショートカット」権限を許可してください</string>
+    <string name="add_to_launcher">「今日のコース」ウィジェットをホーム画面に追加</string>
+    <string name="table_name_cannot_be_empty">時間割名を入力してください</string>
+    <string name="reduce_weeks_warning">週数を減らすと、一部のコースが範囲外になり表示されなくなる可能性があります</string>
+    <string name="extend_weeks_warning">週数を増やすと、「毎週/奇数週/偶数週」コースの適用範囲が変更されます。</string>
+</resources>
