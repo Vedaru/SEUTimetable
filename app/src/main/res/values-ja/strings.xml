@@ -112,4 +112,5 @@
     <string name="refresh">更新</string>
     <string name="loading_failed_click_to_retry">取得失敗。再読み込みする</string>
     <string name="loading_failed_prefix">取得失敗</string>
+    <string name="not_in_current_week">今週は休み</string>
 </resources>

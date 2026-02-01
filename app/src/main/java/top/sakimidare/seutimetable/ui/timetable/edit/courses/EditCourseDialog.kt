@@ -48,7 +48,6 @@ import top.sakimidare.seutimetable.data.model.Course
 import top.sakimidare.seutimetable.data.model.SemesterConfig
 import top.sakimidare.seutimetable.data.model.TableMetadata
 import top.sakimidare.seutimetable.data.model.WeekRule
-import top.sakimidare.seutimetable.data.model.getActualWeeks
 import top.sakimidare.seutimetable.ui.theme.courseBackgroundColors
 import top.sakimidare.seutimetable.viewmodels.EditCourseViewModel
 

@@ -2,7 +2,6 @@ package top.sakimidare.seutimetable.ui.timetable.view.sheets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -57,6 +56,7 @@ fun CourseDetailSheet(
     sheetState: SheetState,
     dragHandle: @Composable () -> Unit,
     course: Course,
+    currentWeek: Int,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -82,7 +82,8 @@ fun CourseDetailSheet(
                 course = course,
                 isWideScreen = isWideScreen,
                 onEdit = onEdit,
-                onDelete = onDelete
+                onDelete = onDelete,
+                currentWeek = currentWeek
             )
         }
     }
@@ -98,7 +99,7 @@ private val mockCourse = Course(
     startPeriod = 1,
     duration = 2,
     color = Color.Red,
-    weekRule = WeekRule.All,
+    weekRule = WeekRule.Even,
     note = "备注"
 )
 
@@ -107,6 +108,7 @@ private val mockCourse = Course(
 fun CourseDetailContentPreview() {
     CourseDetailContent(
         course = mockCourse,
+        currentWeek = 1,
         onEdit = {},
         onDelete = {}
     )
@@ -117,6 +119,7 @@ fun CourseDetailContentPreview() {
 fun CourseDetailContent(
     course: Course,
     isWideScreen: Boolean = true,
+    currentWeek: Int,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -125,7 +128,10 @@ fun CourseDetailContent(
             MaterialTheme.colorScheme.surface
         )
     ) {
-        Heading(course.name)
+        Heading(
+            text = course.name,
+            isCurrentWeek = course.weekRule.matches(currentWeek)
+        )
 
         if (isWideScreen) {
             // ⭐ 大屏：左右分栏
@@ -178,22 +184,37 @@ fun CourseDetailContent(
 
 @Composable
 fun Heading(
-    text: String
+    text: String,
+    isCurrentWeek: Boolean
 ) {
-    Box(
+    Column (
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 100.dp)
             .background(MaterialTheme.colorScheme.surface)
+            .padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
+        if (!isCurrentWeek) {
+            Surface(
+                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.7f),
+                contentColor = MaterialTheme.colorScheme.error,
+                shape = MaterialTheme.shapes.extraSmall,
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.not_in_current_week),
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
         Text(
             text = text,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Light,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(24.dp)
+            modifier = Modifier.padding(vertical = 16.dp)
         )
     }
 }

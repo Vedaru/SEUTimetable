@@ -70,16 +70,19 @@ fun TimetableGridPreview() {
     )
 
 }
+
 @Composable
 fun TimetableGrid(
     tableMetadata: TableMetadata,
     courses: List<Course>,
-    currentWeek: Int, // 💡 新增：当前显示的周次
+    currentWeek: Int,
+    showNonCurrentWeek: Boolean = false,
+    showTimeLine: Boolean = true,
     onCourseClick: (Course) -> Unit,
     activePeriodIndex: Int = -1,
     minPeriodHeight: Dp = 60.dp,
-    timeLabelWidth: Dp = 40.dp, // 💡 统一宽度
-    titleHeight: Dp = 48.dp     // 💡 统一高度
+    timeLabelWidth: Dp = 40.dp,
+    titleHeight: Dp = 48.dp
 ) {
     val gridColor = MaterialTheme.colorScheme.outlineVariant
     val config = tableMetadata.semesterConfig
@@ -131,13 +134,17 @@ fun TimetableGrid(
                 Column {
                     config.periods.forEachIndexed { index, period ->
                         val isActive = index == activePeriodIndex
-                        Row(modifier = Modifier.height(periodHeight).fillMaxWidth()) {
+                        Row(modifier = Modifier
+                            .height(periodHeight)
+                            .fillMaxWidth()) {
                             Box(
                                 modifier = Modifier
                                     .width(timeLabelWidth)
                                     .fillMaxHeight()
                                     .background(
-                                        if (isActive) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                                        if (isActive) MaterialTheme.colorScheme.primaryContainer.copy(
+                                            alpha = 0.3f
+                                        )
                                         else Color.Transparent
                                     ),
                                 contentAlignment = Alignment.Center
@@ -145,39 +152,96 @@ fun TimetableGrid(
                                 PeriodLabel(period = period, isActive = isActive)
                             }
                             sortedVisibleDays.forEach { _ ->
-                                Box(modifier = Modifier.weight(1f).fillMaxHeight().border(0.5.dp, gridColor))
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .fillMaxHeight()
+                                        .border(0.5.dp, gridColor)
+                                )
                             }
                         }
                     }
                 }
-
-                // B. 中层时间指示线
-                timeLineOffset?.let { yOffset ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = timeLabelWidth)
-                            .offset(y = yOffset)
-                            .height(2.dp)
-                            .background(MaterialTheme.colorScheme.primary)
-                            .zIndex(2f)
-                    )
+                if (showTimeLine) {
+                    // B. 中层时间指示线
+                    timeLineOffset?.let { yOffset ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = timeLabelWidth)
+                                .offset(y = yOffset)
+                                .height(2.dp)
+                                .background(MaterialTheme.colorScheme.primary)
+                                .zIndex(2f)
+                        )
+                    }
                 }
 
                 // C. 顶层课程卡片
-                Row(modifier = Modifier.fillMaxWidth().padding(start = timeLabelWidth)) {
+                // --- C. 顶层课程卡片 ---
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = timeLabelWidth)) {
                     sortedVisibleDays.forEach { day ->
-                        Box(modifier = Modifier.weight(1f).height(periodHeight * config.periods.size)) {
-                            courses.filter { it.dayOfWeek == day }.forEach { course ->
-                                val topOffset = periodHeight * (course.startPeriod - 1)
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(periodHeight * config.periods.size)
+                        ) {
+                            // 1. 过滤出当天的所有课程
+                            val dayCourses = courses.filter { it.dayOfWeek == day }
+
+                            // 2. 分离本周和非本周课程
+                            val thisWeek = dayCourses.filter { it.weekRule.matches(currentWeek) }
+                            val otherWeeks = if (showNonCurrentWeek) {
+                                dayCourses.filter { !it.weekRule.matches(currentWeek) }
+                            } else emptyList()
+
+                            // 3. 记录本周占用的节次
+                            val occupiedPeriods = mutableSetOf<Int>()
+                            thisWeek.forEach { course ->
+                                for (p in course.startPeriod until (course.startPeriod + course.duration)) {
+                                    occupiedPeriods.add(p)
+                                }
+                            }
+
+                            // 4. 绘制非本周课程（裁剪模式）
+                            otherWeeks.forEach { course ->
+                                val courseRange =
+                                    (course.startPeriod until (course.startPeriod + course.duration)).toList()
+                                val visiblePeriods = courseRange.filter { it !in occupiedPeriods }
+
+                                if (visiblePeriods.isNotEmpty()) {
+                                    // 这里的 findContinuousBlocks 函数见下方补充
+                                    findContinuousBlocks(visiblePeriods).forEach { block ->
+                                        val blockStart = block.first()
+                                        val blockDuration = block.size
+                                        CourseBlock(
+                                            course = course,
+                                            isCurrentWeek = false, // 假设你的 CourseBlock 接受此参数
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .offset(y = periodHeight * (blockStart - 1))
+                                                .height(periodHeight * blockDuration)
+                                                .zIndex(1f),
+                                            onClick = onCourseClick
+                                        )
+                                    }
+                                    // 避免非本周课程重叠
+                                    occupiedPeriods.addAll(visiblePeriods)
+                                }
+                            }
+
+                            // 5. 绘制本周课程（置顶）
+                            thisWeek.forEach { course ->
                                 CourseBlock(
                                     course = course,
+                                    isCurrentWeek = true,
                                     modifier = Modifier
-                                        .padding(1.dp)
                                         .fillMaxWidth()
-                                        .offset(y = topOffset)
+                                        .offset(y = periodHeight * (course.startPeriod - 1))
                                         .height(periodHeight * course.duration)
-                                        .zIndex(1f),
+                                        .zIndex(2f),
                                     onClick = onCourseClick
                                 )
                             }
@@ -217,4 +281,20 @@ private fun calculateTimeLineOffset(
         }
     }
     return null
+}
+
+private fun findContinuousBlocks(periods: List<Int>): List<List<Int>> {
+    if (periods.isEmpty()) return emptyList()
+    val blocks = mutableListOf<MutableList<Int>>()
+    var currentBlock = mutableListOf(periods[0])
+    for (i in 1 until periods.size) {
+        if (periods[i] == periods[i - 1] + 1) {
+            currentBlock.add(periods[i])
+        } else {
+            blocks.add(currentBlock)
+            currentBlock = mutableListOf(periods[i])
+        }
+    }
+    blocks.add(currentBlock)
+    return blocks
 }

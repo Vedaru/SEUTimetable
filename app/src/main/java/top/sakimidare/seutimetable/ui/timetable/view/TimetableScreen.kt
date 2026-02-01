@@ -164,14 +164,10 @@ fun TimetableScreen(
                 ) { pageIndex ->
                     val weekForThisPage = pageIndex + 1
 
-                    // 过滤当前页显示的课程
-                    val coursesForThisPage = remember(currentTableCourses, weekForThisPage) {
-                        currentTableCourses.filter { it.weekRule.matches(weekForThisPage) }
-                    }
-
                     TimetableGrid(
                         tableMetadata = tableMetadata!!,
-                        courses = coursesForThisPage,
+                        courses = currentTableCourses,
+                        showNonCurrentWeek = true,
                         currentWeek = weekForThisPage, // 💡 必须传入，用于 Header 日期计算
                         activePeriodIndex = if (weekForThisPage == currentWeek) activePeriodIndex else -1,
                         onCourseClick = { course ->
@@ -235,6 +231,7 @@ fun TimetableScreen(
                         showDeleteCourseDialog = true
                         showDetailSheet = false
                     },
+                    currentWeek = currentWeek,
                     sheetState = rememberModalBottomSheetState(),
                     dragHandle = { BottomSheetDefaults.DragHandle() }
                 )

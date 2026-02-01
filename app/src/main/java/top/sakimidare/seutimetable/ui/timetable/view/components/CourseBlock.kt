@@ -2,6 +2,7 @@ package top.sakimidare.seutimetable.ui.timetable.view.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,10 +36,21 @@ private val mockCourse = Course(
 
 @Preview
 @Composable
-fun CourseBlockPreview(){
+fun CourseBlockPreview() {
     CourseBlock(
         modifier = Modifier,
-        course = mockCourse
+        course = mockCourse,
+        isCurrentWeek = false
+    )
+}
+
+@Preview
+@Composable
+fun CourseBlockCurrentWeekPreview() {
+    CourseBlock(
+        modifier = Modifier,
+        course = mockCourse,
+        isCurrentWeek = true
     )
 }
 
@@ -46,46 +58,67 @@ fun CourseBlockPreview(){
 fun CourseBlock(
     modifier: Modifier = Modifier,
     course: Course,
+    isCurrentWeek: Boolean = true,
     onClick: (Course) -> Unit = {}
 ) {
-    Column(
+    val containerColor = if (isCurrentWeek) {
+        course.color
+    } else {
+        // 使用 MaterialTheme 的表面色或灰色，带一点原色的影子
+        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
+    }
+
+    val contentColor = if (isCurrentWeek) {
+        Color.White
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+    }
+
+    BoxWithConstraints(
         modifier = modifier
-            .padding(2.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(course.color)
+            .padding(2.dp) // 网格间距
+            .clip(RoundedCornerShape(6.dp)) // 课表卡片圆角不宜过大
+            .background(containerColor)
             .clickable { onClick(course) }
-            .padding(8.dp),
     ) {
-        // 课程名称 - 加粗突出
-        Text(
-            modifier = Modifier.padding(bottom = 8.dp),
-            text = course.name,
-            color = Color.White,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        // 老师名字 - 较小字体
-        if (course.teacher.isNotBlank()) {
+        val blockHeight = maxHeight
+        val isShort = blockHeight < 80.dp
+        Column(
+            modifier = Modifier.padding(if (isShort) 4.dp else 8.dp)
+        ) {
+            // 课程名称 - 加粗突出
             Text(
-                text = course.teacher,
-                color = Color.White.copy(alpha = 0.9f),
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
+                modifier = Modifier.padding(bottom = 8.dp),
+                text = course.name,
+                color = contentColor,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = if (isCurrentWeek) FontWeight.Bold else FontWeight.Normal,
+                maxLines = if (isShort) 2 else 3,
+                overflow = TextOverflow.Ellipsis,
             )
-        }
 
-        // 上课地点 - 较小字体
-        if (course.location.isNotBlank()) {
-            Text(
-                text = "@" + course.location,
-                color = Color.White.copy(alpha = 0.9f),
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            if (!isShort) {
+                // 老师名字 - 较小字体
+                if (course.teacher.isNotBlank()) {
+                    Text(
+                        text = course.teacher,
+                        color = contentColor.copy(alpha = 0.9f),
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 1,
+                    )
+                }
+
+                // 上课地点 - 较小字体
+                if (course.location.isNotBlank()) {
+                    Text(
+                        text = "@" + course.location,
+                        color = contentColor.copy(alpha = 0.9f),
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
         }
     }
 }
