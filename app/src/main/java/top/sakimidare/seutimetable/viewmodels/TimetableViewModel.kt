@@ -24,7 +24,6 @@ import top.sakimidare.seutimetable.data.model.Course
 import top.sakimidare.seutimetable.data.model.Period
 import top.sakimidare.seutimetable.data.model.SemesterConfig
 import top.sakimidare.seutimetable.data.model.TableMetadata
-import top.sakimidare.seutimetable.data.model.matches
 import top.sakimidare.seutimetable.data.repository.CourseRepository
 import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
 import java.time.LocalDate

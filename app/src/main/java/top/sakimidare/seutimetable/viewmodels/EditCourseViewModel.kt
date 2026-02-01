@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import top.sakimidare.seutimetable.data.model.Course
 import top.sakimidare.seutimetable.data.model.TableMetadata
 import top.sakimidare.seutimetable.data.model.WeekRule
-import top.sakimidare.seutimetable.data.model.getActualWeeks
 import top.sakimidare.seutimetable.ui.theme.courseBackgroundColors
 import java.time.DayOfWeek
 
@@ -60,24 +59,7 @@ class EditCourseViewModel(
     val conflictingCourses by derivedStateOf {
         val totalWeeks = tableMetadata.semesterConfig.weeks
 
-        existingCourses.filter { other ->
-            // 1. 排除非本课表课程，以及正在编辑的课程自身
-            if (other.tableId != tableMetadata.id || (currentCourseId != 0L && other.id == currentCourseId)) {
-                false
-            } else {
-                // 2. 检测“星期”和“节次”是否有重叠
-                val dayMatches = other.dayOfWeek == dayOfWeek
-                val periodOverlap = maxOf(startPeriod, other.startPeriod) <=
-                        minOf(startPeriod + duration - 1, other.startPeriod + other.duration - 1)
-
-                if (dayMatches && periodOverlap) {
-                    // 3. 检测“周次”交集
-                    val currentWeeks = weekRule.getActualWeeks(totalWeeks)
-                    val otherWeeks = other.weekRule.getActualWeeks(totalWeeks)
-                    (currentWeeks intersect otherWeeks).isNotEmpty()
-                } else false
-            }
-        }
+        existingCourses.filter { it.isConflictingWith(getResultCourse(), totalWeeks) }
     }
 
     // 更新判断逻辑

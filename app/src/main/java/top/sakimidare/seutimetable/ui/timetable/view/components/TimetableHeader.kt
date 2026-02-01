@@ -9,13 +9,14 @@ import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun TimetableHeader(
+    modifier: Modifier = Modifier,
     currentWeek: Int,
     startDate: java.time.LocalDate,
     sortedVisibleDays: List<java.time.DayOfWeek>,
     timeLabelWidth: androidx.compose.ui.unit.Dp,
     titleHeight: androidx.compose.ui.unit.Dp,
     locale: java.util.Locale = java.util.Locale.getDefault(),
-    modifier: Modifier = Modifier
+
 ) {
     // 💡 内部逻辑：根据当前周和学期起点计算 7 天日期
     val dates = remember(currentWeek, startDate) {

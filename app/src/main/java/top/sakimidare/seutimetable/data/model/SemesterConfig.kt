@@ -3,6 +3,7 @@ package top.sakimidare.seutimetable.data.model
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 
 data class SemesterConfig(
     val startDate: LocalDate,
@@ -10,6 +11,31 @@ data class SemesterConfig(
     val visibleDays: Set<DayOfWeek> = DayOfWeek.entries.toSet(),
     val periods: List<Period>
 ) {
+    /**
+     * 根据当前配置，计算指定日期是第几周
+     * @param targetDate 目标日期，默认为今天
+     * @return 返回 1..weeks 之间的整数；如果不在学期范围内，则返回 null
+     */
+    fun calculateCurrentWeek(targetDate: LocalDate = LocalDate.now()): Int? {
+        // 1. 校准到开学第一周的周一
+        // 无论 startDate 是周几，课表的第一周通常从那个周的周一开始算
+        val startMonday = startDate.with(DayOfWeek.MONDAY)
+
+        // 2. 校准到学期结束周的周日 (即开学周一往后推 weeks 周)
+        val endSunday = startMonday.plusWeeks(weeks.toLong()).minusDays(1)
+
+        // 3. 边界检查
+        if (targetDate.isBefore(startMonday) || targetDate.isAfter(endSunday)) {
+            return null
+        }
+
+        // 4. 计算周次
+        val daysBetween = ChronoUnit.DAYS.between(startMonday, targetDate)
+        val calculatedWeek = (daysBetween / 7).toInt() + 1
+
+        // 5. 限制区间并返回
+        return calculatedWeek.coerceIn(1, weeks)
+    }
     companion object {
         fun default(): SemesterConfig {
             val currentYear = LocalDate.now().year

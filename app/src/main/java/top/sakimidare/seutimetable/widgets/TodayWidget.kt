@@ -50,8 +50,6 @@ import top.sakimidare.seutimetable.data.local.AppDatabase
 import top.sakimidare.seutimetable.data.model.Course
 import top.sakimidare.seutimetable.data.model.SemesterConfig
 import top.sakimidare.seutimetable.data.model.TableMetadata
-import top.sakimidare.seutimetable.data.model.matches
-import top.sakimidare.seutimetable.data.utils.TimetableUtils.calculateCurrentWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -68,7 +66,7 @@ class TodayWidget : GlanceAppWidget() {
             val db = AppDatabase.getDatabase(context)
             val currentTable = db.tableDao().getCurrentTableSync() ?: return null
 
-            val currentWeek = calculateCurrentWeek(currentTable.semesterConfig) ?: return null
+            val currentWeek = currentTable.semesterConfig.calculateCurrentWeek() ?: return null
             val today = LocalDate.now().dayOfWeek
 
             val courses = db.courseDao().getCoursesByDaySync(currentTable.id, today)

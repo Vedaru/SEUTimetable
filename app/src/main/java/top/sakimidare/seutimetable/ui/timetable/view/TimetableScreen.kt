@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import top.sakimidare.seutimetable.R
 import top.sakimidare.seutimetable.data.model.Course
 import top.sakimidare.seutimetable.data.model.TableMetadata
-import top.sakimidare.seutimetable.data.model.matches
 import top.sakimidare.seutimetable.ui.timetable.edit.EmptyGuidePlaceholder
 import top.sakimidare.seutimetable.ui.timetable.edit.TimetableAction
 import top.sakimidare.seutimetable.ui.timetable.edit.TimetableActionSheet
