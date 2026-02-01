@@ -109,4 +109,7 @@
     <string name="table_name_cannot_be_empty">時間割名を入力してください</string>
     <string name="reduce_weeks_warning">週数を減らすと、一部のコースが範囲外になり表示されなくなる可能性があります</string>
     <string name="extend_weeks_warning">週数を増やすと、「毎週/奇数週/偶数週」コースの適用範囲が変更されます。</string>
+    <string name="refresh">更新</string>
+    <string name="loading_failed_click_to_retry">取得失敗。再読み込みする</string>
+    <string name="loading_failed_prefix">取得失敗</string>
 </resources>

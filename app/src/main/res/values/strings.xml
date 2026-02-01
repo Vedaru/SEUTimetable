@@ -108,4 +108,7 @@
     <string name="table_name_cannot_be_empty">Table name cannot be empty</string>
     <string name="reduce_weeks_warning">Reducing the number of weeks may result in some courses being truncated and becoming unavailable</string>
     <string name="extend_weeks_warning">Increasing the number of weeks will change the coverage of \"weekly/odd/even-week\" courses.</string>
+    <string name="refresh">Refresh</string>
+    <string name="loading_failed_click_to_retry">Loading failed. Click to retry</string>
+    <string name="loading_failed_prefix">Loading failed</string>
 </resources>

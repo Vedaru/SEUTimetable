@@ -13,7 +13,7 @@ data class NewsPageResult(
 
 object JwcCrawler {
     private const val BASE_URL = "https://jwc.seu.edu.cn"
-
+    private const val TAG = "JwcCrawler"
     suspend fun fetchNews(categoryPath: String, page: Int = 1): NewsPageResult =
         withContext(Dispatchers.IO) {
             val list = mutableListOf<NewsItem>()
@@ -64,8 +64,8 @@ object JwcCrawler {
                 }
 
             } catch (e: Exception) {
-                Log.e("JwcCrawler", "抓取失败: ${e.message}")
-                hasNext = false
+                Log.e(TAG, "抓取失败: ${e.message}")
+                throw e
             }
 
             NewsPageResult(newsItems = list, hasNextPage = hasNext)

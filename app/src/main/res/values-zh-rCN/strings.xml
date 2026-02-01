@@ -109,4 +109,7 @@
     <string name="table_name_cannot_be_empty">课表名不能为空</string>
     <string name="reduce_weeks_warning">缩小周数可能导致部分课程被截断不可见</string>
     <string name="extend_weeks_warning">增大周数会改变“每周/单双周”课程的覆盖范围</string>
+    <string name="refresh">刷新</string>
+    <string name="loading_failed_click_to_retry">加载失败，点此重试</string>
+    <string name="loading_failed_prefix">加载失败</string>
 </resources>

@@ -24,6 +24,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,9 +33,12 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SecondaryScrollableTabRow
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,10 +49,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -118,7 +124,6 @@ fun NewsList(
     // 1. 列表状态与协程作用域
     val listState = rememberLazyGridState()
     val scope = rememberCoroutineScope()
-
     // 2. 自动触发初始加载
     LaunchedEffect(categoryPath) {
         viewModel.loadCategory(categoryPath)
@@ -147,13 +152,27 @@ fun NewsList(
     }
 
     val currentNews = viewModel.getNewsState(categoryPath)
+    val error = viewModel.getError(categoryPath)
     val uriHandler = LocalUriHandler.current
     val configuration = LocalConfiguration.current
+    val errorMessagePrefix = stringResource(R.string.loading_failed_prefix)
 
     val columns = when {
         configuration.screenWidthDp >= 840 -> GridCells.Fixed(3)
         configuration.screenWidthDp >= 600 -> GridCells.Fixed(2)
         else -> GridCells.Fixed(1)
+    }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(viewModel.getError(categoryPath)) {
+        val currentError = viewModel.getError(categoryPath)
+        val latestNews = viewModel.getNewsState(categoryPath)
+        if (currentError != null && latestNews.isNotEmpty()) {
+            snackbarHostState.showSnackbar(
+                message = "$errorMessagePrefix: $currentError",
+                withDismissAction = true
+            )
+        }
     }
 
     // 使用 Box 包装以放置悬浮按钮
@@ -165,6 +184,25 @@ fun NewsList(
         ) {
             if (viewModel.isLoading && currentNews.isEmpty()) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+            else if (error != null && currentNews.isEmpty()) {
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("😥", fontSize = 48.sp)
+                    Text(
+                        text = "$errorMessagePrefix: $error",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    Button(
+                        onClick = { viewModel.loadCategory(categoryPath, isRefresh = true) },
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Text(stringResource(R.string.refresh))
+                    }
+                }
             } else {
                 LazyVerticalGrid(
                     state = listState, // 必须绑定 state
@@ -197,7 +235,15 @@ fun NewsList(
                                 .padding(8.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            if (viewModel.isEnd(categoryPath)) {
+                            val currentError = viewModel.getError(categoryPath)
+
+                            if (currentError != null && currentNews.isNotEmpty()) {
+                                TextButton(
+                                    onClick = { viewModel.loadNextPage(categoryPath) }
+                                ) {
+                                    Text(stringResource(R.string.loading_failed_click_to_retry))
+                                }
+                            } else if (viewModel.isEnd(categoryPath)) {
                                 Text(
                                     stringResource(R.string.end_of_info),
                                     style = MaterialTheme.typography.bodySmall,
@@ -230,6 +276,13 @@ fun NewsList(
                 Icon(Icons.Default.ArrowUpward, contentDescription = stringResource(R.string.top))
             }
         }
+
+        // 错误提示
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+        )
     }
 }
 @Composable
