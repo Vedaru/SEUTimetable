@@ -82,7 +82,8 @@ class TimetableViewModel(
         if (tableId == null) emptyList() else courses.filter { it.tableId == tableId }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-
+    val hasNoTable = allTables.map { it.isEmpty() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
     /* -------------------------------------------------------
        2. 动态时间驱动 (Time Driven States)
     ------------------------------------------------------- */

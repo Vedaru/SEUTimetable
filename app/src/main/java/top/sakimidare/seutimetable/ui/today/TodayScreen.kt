@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BeachAccess
 import androidx.compose.material.icons.filled.Celebration
+import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
@@ -38,6 +39,8 @@ fun TodayScreen(
     val semesterConfig by viewModel.semesterConfig.collectAsState()
     val actualWeek by viewModel.actualCurrentWeek.collectAsState()
     val todayOfWeek by viewModel.todayDayOfWeek.collectAsState()
+    val hasNoTable by viewModel.hasNoTable.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -58,7 +61,12 @@ fun TodayScreen(
             start = 16.dp,
             end = 16.dp
         )
-        if (actualWeek == null) {
+        if (hasNoTable) {
+            NoTableWelcomeView(
+                padding = finalPadding,
+                onNavigateToTimetable = onNavigateToTimetable
+            )
+        } else if (actualWeek == null) {
             // 💡 情况 A：当前不在学期内（假期中）
             VacationView(
                 padding = finalPadding,
@@ -338,6 +346,41 @@ private fun StatusInfoSection(label: String, courseName: String, color: Color) {
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Composable
+private fun NoTableWelcomeView(
+    padding: PaddingValues,
+    onNavigateToTimetable: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            // 使用 BeachAccess 图标，颜色设为 secondary 显得更轻松
+            Icon(
+                imageVector = Icons.Default.EventBusy,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = stringResource(R.string.no_timetables_yet), // 没有课表
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.height(24.dp))
+            Button(
+                onClick = onNavigateToTimetable
+            ) {
+                Text(stringResource(R.string.nav_go_to_timetable))
+            }
+        }
     }
 }
 
