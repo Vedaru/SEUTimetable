@@ -1,5 +1,6 @@
 package top.sakimidare.seutimetable.ui.news.info
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -51,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,6 +62,9 @@ import kotlinx.coroutines.launch
 import top.sakimidare.seutimetable.R
 import top.sakimidare.seutimetable.data.model.CategoryConfig
 import top.sakimidare.seutimetable.viewmodels.NewsViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @Composable
 fun InfoContents(
@@ -290,6 +295,9 @@ fun InfoCard(
     date: String = "",
     onClick: () -> Unit
 ) {
+    val daysAgo = remember(date) { getDaysAgo(date) }
+    val isFresh = daysAgo <= 14L
+
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -297,7 +305,7 @@ fun InfoCard(
             .height(130.dp),
         // 增加一点动态阴影效果
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp,
+            defaultElevation = if (isFresh) 4.dp else 2.dp,
             pressedElevation = 6.dp
         ),
         border = null,
@@ -315,10 +323,10 @@ fun InfoCard(
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (isFresh) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                fontWeight = if(isFresh) FontWeight.Bold else FontWeight.Normal,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
-//                modifier = Modifier.weight(1f)
             )
 
             // 2. 日期：如果日期不为空，显示在右下方
@@ -332,5 +340,18 @@ fun InfoCard(
                 )
             }
         }
+    }
+}
+
+
+private fun getDaysAgo(dateString: String): Long {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val itemDate = LocalDate.parse(dateString, formatter)
+        val today = LocalDate.now()
+        ChronoUnit.DAYS.between(itemDate, today)
+    } catch (e: Exception) {
+        Log.e("NewsViewModel", "Error parsing date: $dateString", e)
+        999L // 解析失败则视为旧闻
     }
 }
