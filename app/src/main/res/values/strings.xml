@@ -119,4 +119,6 @@
     <string name="courses_today">Courses Today</string>
     <string name="nav_go_to_timetable">Go to timetable</string>
     <string name="break_time">Break</string>
+    <string name="enjoy_your_vacation">Enjoy your vacation</string>
+    <string name="outside_semester_time">It\'s currently outside of the semester</string>
 </resources>

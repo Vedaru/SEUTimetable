@@ -120,4 +120,6 @@
     <string name="today">今日</string>
     <string name="nav_go_to_timetable">转到课程表</string>
     <string name="break_time">课间休息</string>
+    <string name="enjoy_your_vacation">享受假期吧</string>
+    <string name="outside_semester_time">当前不在学期时间内</string>
 </resources>

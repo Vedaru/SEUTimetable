@@ -120,4 +120,6 @@
     <string name="courses_today">今日のコース</string>
     <string name="nav_go_to_timetable">時間割へ</string>
     <string name="break_time">休み時間</string>
+    <string name="enjoy_your_vacation">休暇を楽しんで</string>
+    <string name="outside_semester_time">現在は学期期間外です</string>
 </resources>

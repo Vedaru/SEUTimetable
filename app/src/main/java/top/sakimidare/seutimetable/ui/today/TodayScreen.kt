@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BeachAccess
 import androidx.compose.material.icons.filled.Celebration
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -57,8 +58,13 @@ fun TodayScreen(
             start = 16.dp,
             end = 16.dp
         )
-
-        if (todayCourses.isEmpty()) {
+        if (actualWeek == null) {
+            // 💡 情况 A：当前不在学期内（假期中）
+            VacationView(
+                padding = finalPadding,
+                onNavigateToTimetable = onNavigateToTimetable
+            )
+        } else if (todayCourses.isEmpty()) {
             EmptyTodayView(
                 padding = finalPadding,
                 onNavigateToTimetable = onNavigateToTimetable
@@ -70,7 +76,7 @@ fun TodayScreen(
                     activeCourse = activeCourse,
                     nextCourse = nextCourse,
                     semesterConfig = semesterConfig,
-                    currentWeek = actualWeek,
+                    currentWeek = actualWeek!!,
                     todayOfWeek = todayOfWeek,
                     padding = finalPadding,
                     viewModel = viewModel
@@ -80,7 +86,7 @@ fun TodayScreen(
                     courses = todayCourses,
                     nextCourse = nextCourse,
                     semesterConfig = semesterConfig,
-                    currentWeek = actualWeek,
+                    currentWeek = actualWeek!!,
                     todayOfWeek = todayOfWeek,
                     padding = finalPadding,
                     viewModel = viewModel
@@ -335,6 +341,45 @@ private fun StatusInfoSection(label: String, courseName: String, color: Color) {
     }
 }
 
+@Composable
+private fun VacationView(
+    padding: PaddingValues,
+    onNavigateToTimetable: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            // 使用 BeachAccess 图标，颜色设为 secondary 显得更轻松
+            Icon(
+                imageVector = Icons.Default.BeachAccess,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = stringResource(R.string.enjoy_your_vacation), // "享受假期吧"
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = stringResource(R.string.outside_semester_time), // "当前不在学期时间内"
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(Modifier.height(24.dp))
+            Button(
+                onClick = onNavigateToTimetable
+            ) {
+                Text(stringResource(R.string.nav_go_to_timetable))
+            }
+        }
+    }
+}
 @Composable
 private fun EmptyTodayView(
     padding: PaddingValues,

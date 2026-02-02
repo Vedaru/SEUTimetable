@@ -115,14 +115,20 @@ class TimetableViewModel(
      */
     val actualCurrentWeek = semesterConfig.map { config ->
         val today = LocalDate.now()
+        // 找到开学那周的周一
         val startMonday = config.startDate.with(java.time.DayOfWeek.MONDAY)
         val daysBetween = ChronoUnit.DAYS.between(startMonday, today)
         val week = (daysBetween / 7).toInt() + 1
 
-        // 限制在有效学期周数内，或者返回 -1 表示学期未开始/已结束
-        if (today.isBefore(config.startDate)) 0
-        else week.coerceIn(1, config.weeks)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+        when {
+            // 1. 开学日期之前，返回 null
+            today.isBefore(config.startDate) -> null
+            // 2. 超过总周数，返回 null
+            week > config.weeks -> null
+            // 3. 在 1..weeks 之间，返回真实周次
+            else -> week
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     /** 今天星期几 */
     val todayDayOfWeek = currentTime.map {
@@ -145,9 +151,14 @@ class TimetableViewModel(
 
     /** 今日需上的课程 (用于今日页面) */
     val todayCourses = combine(currentTableCourses, actualCurrentWeek, currentTime) { courses, week, _ ->
-        val today = LocalDate.now().dayOfWeek
-        courses.filter { it.dayOfWeek == today && it.weekRule.matches(week) }
-            .sortedWith(compareBy({ it.startPeriod }, { it.duration }))
+        // 💡 如果 week 为 null，说明不在学期内，直接返回空列表
+        if (week == null) {
+            emptyList()
+        } else {
+            val today = LocalDate.now().dayOfWeek
+            courses.filter { it.dayOfWeek == today && it.weekRule.matches(week) }
+                .sortedWith(compareBy({ it.startPeriod }, { it.duration }))
+        }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     /** 当前正在上的课 */
