@@ -271,12 +271,20 @@ class TimetableViewModel(
     }
 
     fun deleteTable(tableId: Long) = viewModelScope.launch {
+        val currentList = allTables.value
+        val isDeletingCurrent = (currentTableId.value == tableId)
         courseRepository.deleteTableById(tableId)
-        val remaining = allTables.value.filter { it.id != tableId }
-        if (remaining.isEmpty()) {
-            _currentWeek.value = 1
-        } else if (currentTableId.value == tableId) {
-            courseRepository.switchTable(remaining.first().id)
+        if (isDeletingCurrent) {
+            val remaining = currentList.filter { it.id != tableId }
+
+            if (remaining.isNotEmpty()) {
+                val nextTable = remaining.first()
+                isNavigatingToNewTable = true
+                courseRepository.switchTable(nextTable.id)
+                syncToActualWeek(nextTable.semesterConfig)
+            } else {
+                _currentWeek.value = 1
+            }
         }
     }
 
