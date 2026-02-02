@@ -164,7 +164,11 @@ private fun TodayExpandedContent(
                     color = if (isInBreak) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
                 )
             } else if (nextCourse != null) {
-                StatusInfoSection(stringResource(R.string.next_course), nextCourse.name, MaterialTheme.colorScheme.secondary)
+                StatusInfoSection(
+                    stringResource(R.string.next_course),
+                    nextCourse.name,
+                    MaterialTheme.colorScheme.secondary
+                )
             }
         }
 
@@ -231,15 +235,20 @@ private fun CourseCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // 时间轴部分
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(52.dp)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(52.dp)
+            ) {
                 Text(
                     text = course.getStartTime(semesterConfig)?.toString() ?: "--",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
-                Box(modifier = Modifier
-                    .size(1.dp, 12.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant))
+                Box(
+                    modifier = Modifier
+                        .size(1.dp, 12.dp)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
+                )
                 Text(
                     text = course.getEndTime(semesterConfig)?.toString() ?: "--",
                     style = MaterialTheme.typography.labelSmall,
@@ -258,15 +267,17 @@ private fun CourseCard(
                     overflow = TextOverflow.Ellipsis,
                     fontWeight = if (isActive) FontWeight.ExtraBold else FontWeight.SemiBold
                 )
-                Text(
-                    text = course.location + " · " + stringResource(
-                        R.string.section_format,
-                        course.startPeriod,
-                        course.startPeriod + course.duration - 1
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                if (course.teacher.isNotBlank() || course.location.isNotBlank()) {
+                    Text(
+                        text = (if (course.location.isBlank()) "" else (course.location + " · ")) + stringResource(
+                            R.string.section_format,
+                            course.startPeriod,
+                            course.startPeriod + course.duration - 1
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
             // 状态指示
@@ -281,6 +292,7 @@ private fun CourseCard(
                         labelColor = if (isBreakTime) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
                     )
                 )
+
                 isNext -> SuggestionChip(
                     onClick = {},
                     label = { Text(stringResource(R.string.upcoming)) }
@@ -315,7 +327,11 @@ private fun TodayHeader(currentWeek: Int, currentDayOfWeek: DayOfWeek) {
 private fun StatusInfoSection(label: String, courseName: String, color: Color) {
     Column {
         Text(label, style = MaterialTheme.typography.labelMedium, color = color)
-        Text(courseName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text(
+            courseName,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
@@ -324,9 +340,11 @@ private fun EmptyTodayView(
     padding: PaddingValues,
     onNavigateToTimetable: () -> Unit
 ) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(padding), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding), contentAlignment = Alignment.Center
+    ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
                 Icons.Default.Celebration,
@@ -335,7 +353,10 @@ private fun EmptyTodayView(
                 tint = MaterialTheme.colorScheme.outline
             )
             Spacer(Modifier.height(16.dp))
-            Text(stringResource(R.string.no_courses_today), style = MaterialTheme.typography.bodyLarge)
+            Text(
+                stringResource(R.string.no_courses_today),
+                style = MaterialTheme.typography.bodyLarge
+            )
             Spacer(Modifier.height(16.dp))
             Button(
                 onClick = onNavigateToTimetable

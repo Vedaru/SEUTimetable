@@ -143,7 +143,7 @@ fun TimetableScreen(
                     TimetableGrid(
                         tableMetadata = currentTable, // 使用稳定引用
                         courses = currentTableCourses,
-                        showNonCurrentWeek = false,
+                        showNonCurrentWeek = true,
                         currentWeek = pageIndex + 1,
                         activePeriodIndex = if (pageIndex + 1 == currentWeek) activePeriodIndex else -1,
                         onCourseClick = { course ->

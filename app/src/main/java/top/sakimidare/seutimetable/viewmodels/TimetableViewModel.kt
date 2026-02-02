@@ -143,10 +143,11 @@ class TimetableViewModel(
     }.flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    /** 今日需上的课程 (用于今日页面及小组件) */
+    /** 今日需上的课程 (用于今日页面) */
     val todayCourses = combine(currentTableCourses, actualCurrentWeek, currentTime) { courses, week, _ ->
         val today = LocalDate.now().dayOfWeek
         courses.filter { it.dayOfWeek == today && it.weekRule.matches(week) }
+            .sortedWith(compareBy({ it.startPeriod }, { it.duration }))
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     /** 当前正在上的课 */
