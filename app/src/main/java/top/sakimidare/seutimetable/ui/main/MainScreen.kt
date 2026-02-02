@@ -119,13 +119,12 @@ fun MainScreen(
                 ) { innerPadding ->
                     Box(Modifier.fillMaxSize()) {
                         when (currentTab) {
-                            MainTab.Today -> Box(Modifier.padding(innerPadding)) {
-                                TodayScreen(
-                                    viewModel = timetableViewModel,
-                                    contentPadding = innerPadding,
-                                    windowSize = windowSizeClass.widthSizeClass,
-                                )
-                            }
+                            MainTab.Today -> TodayScreen(
+                                viewModel = timetableViewModel,
+                                contentPadding = innerPadding,
+                                windowSize = windowSizeClass.widthSizeClass,
+                                onNavigateToTimetable = { currentTab = MainTab.Timetable }
+                            )
                             MainTab.Timetable -> TimetableScreen(
                                 viewModel = timetableViewModel,
                                 onImportRequest = { showImportWebView = true },

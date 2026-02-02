@@ -113,4 +113,10 @@
     <string name="loading_failed_click_to_retry">取得失敗。再読み込みする</string>
     <string name="loading_failed_prefix">取得失敗</string>
     <string name="not_in_current_week">今週は休み</string>
+    <string name="today">今日</string>
+    <string name="having_lesson">授業中</string>
+    <string name="next_course">次のコース</string>
+    <string name="upcoming">まもなく開始</string>
+    <string name="courses_today">今日のコース</string>
+    <string name="nav_go_to_timetable">時間割へ</string>
 </resources>

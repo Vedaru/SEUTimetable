@@ -107,7 +107,28 @@ class TimetableViewModel(
     ------------------------------------------------------- */
 
     private val _currentWeek = MutableStateFlow(1)
+    /** 用户正在看的周次 */
     val currentWeek = _currentWeek.asStateFlow()
+
+    /** * 真正的“今日”周次（根据系统时间计算）
+     * 即使 Pager 翻到了其他周，这个值也保持不变。
+     */
+    val actualCurrentWeek = semesterConfig.map { config ->
+        val today = LocalDate.now()
+        val startMonday = config.startDate.with(java.time.DayOfWeek.MONDAY)
+        val daysBetween = ChronoUnit.DAYS.between(startMonday, today)
+        val week = (daysBetween / 7).toInt() + 1
+
+        // 限制在有效学期周数内，或者返回 -1 表示学期未开始/已结束
+        if (today.isBefore(config.startDate)) 0
+        else week.coerceIn(1, config.weeks)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+
+    /** 今天星期几 */
+    val todayDayOfWeek = currentTime.map {
+        LocalDate.now().dayOfWeek
+    }.distinctUntilChanged()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), LocalDate.now().dayOfWeek)
 
     /** 当前选定周的日期列表 */
     val currentWeekDates = combine(_currentWeek, semesterConfig) { week, config ->
@@ -123,7 +144,7 @@ class TimetableViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     /** 今日需上的课程 (用于今日页面及小组件) */
-    val todayCourses = combine(currentTableCourses, _currentWeek, currentTime) { courses, week, _ ->
+    val todayCourses = combine(currentTableCourses, actualCurrentWeek, currentTime) { courses, week, _ ->
         val today = LocalDate.now().dayOfWeek
         courses.filter { it.dayOfWeek == today && it.weekRule.matches(week) }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

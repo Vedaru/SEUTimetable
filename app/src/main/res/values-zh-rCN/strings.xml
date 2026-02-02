@@ -113,4 +113,10 @@
     <string name="loading_failed_click_to_retry">加载失败，点此重试</string>
     <string name="loading_failed_prefix">加载失败</string>
     <string name="not_in_current_week">非本周课程</string>
+    <string name="having_lesson">正在上课</string>
+    <string name="next_course">下一节课</string>
+    <string name="upcoming">即将开始</string>
+    <string name="courses_today">今日课程</string>
+    <string name="today">今日</string>
+    <string name="nav_go_to_timetable">转到课程表</string>
 </resources>

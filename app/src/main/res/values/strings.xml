@@ -113,4 +113,9 @@
     <string name="loading_failed_prefix">Loading failed</string>
     <string name="not_in_current_week">Not in Current Week</string>
     <string name="today">Today</string>
+    <string name="next_course">Next Course</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="having_lesson">In Progress</string>
+    <string name="courses_today">Courses Today</string>
+    <string name="nav_go_to_timetable">Go to timetable</string>
 </resources>
