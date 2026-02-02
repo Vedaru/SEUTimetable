@@ -88,7 +88,7 @@ class TimetableViewModel(
     ------------------------------------------------------- */
 
     /** 每分钟更新一次的时间流，驱动 UI 实时感知课程状态 */
-    private val currentTime = flow {
+    val currentTime = flow {
         while (true) {
             emit(LocalTime.now())
             delay(30_000) // 30秒精度
@@ -150,16 +150,29 @@ class TimetableViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     /** 当前正在上的课 */
-    val activeCourse = combine(todayCourses, activePeriodIndex) { courses, index ->
-        if (index == -1) null
-        else courses.find { it.startPeriod <= index + 1 && (it.startPeriod + it.duration - 1) >= index + 1 }
+    val activeCourse = combine(todayCourses, currentTime, semesterConfig) { courses, now, config ->
+        courses.find { course ->
+            val firstPeriod = config.periods.getOrNull(course.startPeriod - 1)
+            val lastPeriod = config.periods.getOrNull(course.startPeriod + course.duration - 2)
+
+            if (firstPeriod != null && lastPeriod != null) {
+                // 💡 关键：只要时间在整门课的“大开头”和“大结尾”之间，都算 Active
+                !now.isBefore(firstPeriod.start) && !now.isAfter(lastPeriod.end)
+            } else false
+        }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    /** 下课休息 */
+    val isInBreakTime = combine(activeCourse, activePeriodIndex, currentTime) { course, periodIndex, now ->
+        // 如果有活跃课程，但当前时间不在任何具体的“节次”索引里，说明在课间
+        course != null && periodIndex == -1
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
     /** 下一节要上的课 */
-    val nextCourse = combine(todayCourses, currentTime, semesterConfig) { courses, now, config ->
+    val nextCourse = combine(todayCourses, currentTime, semesterConfig, activeCourse) { courses, now, config, active ->
         courses.filter {
             val startTime = config.periods.getOrNull(it.startPeriod - 1)?.start
-            startTime != null && startTime.isAfter(now)
+            it != active && startTime != null && startTime.isAfter(now)
         }.minByOrNull { it.startPeriod }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 

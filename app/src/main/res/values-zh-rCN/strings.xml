@@ -119,4 +119,5 @@
     <string name="courses_today">今日课程</string>
     <string name="today">今日</string>
     <string name="nav_go_to_timetable">转到课程表</string>
+    <string name="break_time">课间休息</string>
 </resources>

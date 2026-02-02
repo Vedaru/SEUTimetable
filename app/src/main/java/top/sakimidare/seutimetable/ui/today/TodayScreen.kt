@@ -37,7 +37,6 @@ fun TodayScreen(
     val semesterConfig by viewModel.semesterConfig.collectAsState()
     val actualWeek by viewModel.actualCurrentWeek.collectAsState()
     val todayOfWeek by viewModel.todayDayOfWeek.collectAsState()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -79,7 +78,6 @@ fun TodayScreen(
             } else {
                 TodayCompactContent(
                     courses = todayCourses,
-                    activeCourse = activeCourse,
                     nextCourse = nextCourse,
                     semesterConfig = semesterConfig,
                     currentWeek = actualWeek,
@@ -97,7 +95,6 @@ fun TodayScreen(
 @Composable
 private fun TodayCompactContent(
     courses: List<Course>,
-    activeCourse: Course?,
     nextCourse: Course?,
     semesterConfig: SemesterConfig,
     currentWeek: Int,
@@ -105,6 +102,9 @@ private fun TodayCompactContent(
     padding: PaddingValues,
     viewModel: TimetableViewModel
 ) {
+    val activePeriodIndex by viewModel.activePeriodIndex.collectAsState() // 💡 必须 collect
+    val currentTime by viewModel.currentTime.collectAsState()
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = padding,
@@ -118,12 +118,17 @@ private fun TodayCompactContent(
             Spacer(Modifier.height(12.dp))
         }
         items(courses, key = { it.id }) { course ->
+            val isCurrentActive = isCourseActive(course, semesterConfig, currentTime)
+            val isBreak = isCurrentActive && activePeriodIndex == -1
+            val isPassed = isCoursePassed(course, semesterConfig, currentTime)
+
             CourseCard(
                 course = course,
                 semesterConfig = semesterConfig,
-                isActive = course == activeCourse,
+                isActive = isCurrentActive,
                 isNext = course == nextCourse,
-                isPassed = isCoursePassed(course, semesterConfig, viewModel)
+                isPassed = isPassed,
+                isBreakTime = isBreak
             )
         }
     }
@@ -140,6 +145,9 @@ private fun TodayExpandedContent(
     padding: PaddingValues,
     viewModel: TimetableViewModel
 ) {
+    val activePeriodIndex by viewModel.activePeriodIndex.collectAsState()
+    val isInBreak = activeCourse != null && activePeriodIndex == -1
+    val currentTime by viewModel.currentTime.collectAsState()
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -150,7 +158,11 @@ private fun TodayExpandedContent(
             TodayHeader(currentWeek, todayOfWeek)
             Spacer(Modifier.height(24.dp))
             if (activeCourse != null) {
-                StatusInfoSection(stringResource(R.string.having_lesson), activeCourse.name, MaterialTheme.colorScheme.primary)
+                StatusInfoSection(
+                    label = stringResource(if (isInBreak) R.string.break_time else R.string.having_lesson),
+                    courseName = activeCourse.name,
+                    color = if (isInBreak) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+                )
             } else if (nextCourse != null) {
                 StatusInfoSection(stringResource(R.string.next_course), nextCourse.name, MaterialTheme.colorScheme.secondary)
             }
@@ -161,12 +173,16 @@ private fun TodayExpandedContent(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(courses, key = { it.id }) { course ->
+                val isCurrentActive = isCourseActive(course, semesterConfig, currentTime)
+                val isBreak = isCurrentActive && activePeriodIndex == -1
+                val isPassed = isCoursePassed(course, semesterConfig, currentTime)
                 CourseCard(
                     course = course,
                     semesterConfig = semesterConfig,
-                    isActive = course == activeCourse,
+                    isActive = isCurrentActive,
                     isNext = course == nextCourse,
-                    isPassed = isCoursePassed(course, semesterConfig, viewModel)
+                    isPassed = isPassed,
+                    isBreakTime = isBreak
                 )
             }
         }
@@ -181,20 +197,31 @@ private fun CourseCard(
     semesterConfig: SemesterConfig,
     isActive: Boolean,
     isNext: Boolean,
-    isPassed: Boolean
+    isPassed: Boolean,
+    isBreakTime: Boolean
 ) {
     val alpha = if (isPassed) 0.5f else 1f
+    val containerColor = when {
+        isPassed -> MaterialTheme.colorScheme.surface
+        isActive && isBreakTime -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.2f)
+        isActive -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+        else -> MaterialTheme.colorScheme.surface
+    }
+
+    val borderColor = when {
+        isActive && isBreakTime -> MaterialTheme.colorScheme.secondary
+        isActive -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.outlineVariant
+    }
 
     OutlinedCard(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.outlinedCardColors(
-            containerColor = if (isActive)
-                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
-            else MaterialTheme.colorScheme.surface
+            containerColor = containerColor
         ),
         border = if (isActive) CardDefaults.outlinedCardBorder(true).copy(
-            brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.primary)
+            brush = androidx.compose.ui.graphics.SolidColor(borderColor)
         ) else CardDefaults.outlinedCardBorder(true)
     ) {
         Row(
@@ -246,10 +273,12 @@ private fun CourseCard(
             when {
                 isActive -> SuggestionChip(
                     onClick = {},
-                    label = { Text(stringResource(R.string.having_lesson)) },
+                    label = {
+                        Text(stringResource(if (isBreakTime) R.string.break_time else R.string.having_lesson))
+                    },
                     colors = SuggestionChipDefaults.suggestionChipColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        labelColor = MaterialTheme.colorScheme.onPrimary
+                        containerColor = if (isBreakTime) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
+                        labelColor = if (isBreakTime) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
                     )
                 )
                 isNext -> SuggestionChip(
@@ -319,14 +348,23 @@ private fun EmptyTodayView(
 
 // --- 辅助方法 ---
 
+private fun isCourseActive(
+    course: Course,
+    semesterConfig: SemesterConfig,
+    currentTime: java.time.LocalTime
+): Boolean {
+    val start = course.getStartTime(semesterConfig) ?: return false
+    val end = course.getEndTime(semesterConfig) ?: return false
+    // 只要当前时间在整门连堂课的“大开始”和“大结束”之间，就是 Active
+    return !currentTime.isBefore(start) && !currentTime.isAfter(end)
+}
+
 private fun isCoursePassed(
     course: Course,
     config: SemesterConfig,
-    viewModel: TimetableViewModel
+    currentTime: java.time.LocalTime
 ): Boolean {
-    // 判定课程最后一节是否已经结束
-    val lastPeriodIndex = course.startPeriod + course.duration - 2
-    return config.periods.getOrNull(lastPeriodIndex)?.let {
-        viewModel.isPeriodPassed(it)
-    } ?: false
+    val end = course.getEndTime(config) ?: return false
+    // 严格晚于整门课的结束时间才算“已结束”
+    return currentTime.isAfter(end)
 }
