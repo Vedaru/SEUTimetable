@@ -53,4 +53,8 @@ data class Course(
         // 4. 精度检测：周次是否有交集 (利用 WeekRule 已有的重叠判断逻辑)
         return this.weekRule.overlapsWith(other.weekRule, totalWeeks)
     }
+
+    fun getStartTime(config: SemesterConfig) = config.periods.getOrNull(this.startPeriod - 1)?.start
+    fun getEndTime(config: SemesterConfig) = config.periods.getOrNull(this.startPeriod + this.duration - 2)?.end
+
 }

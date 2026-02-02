@@ -39,6 +39,7 @@ import top.sakimidare.seutimetable.ui.importing.ImportWebViewScreen
 import top.sakimidare.seutimetable.ui.news.NewsScreen
 import top.sakimidare.seutimetable.ui.profile.ProfileScreen
 import top.sakimidare.seutimetable.ui.timetable.view.TimetableScreen
+import top.sakimidare.seutimetable.ui.today.TodayScreen
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +50,6 @@ fun MainScreen(
 ) {
     val isAccepted by timetableViewModel.isDisclaimerAccepted.collectAsState()
     val context = LocalContext.current
-
     when (isAccepted){
         null -> { /* 空白页，避免瞬间闪烁 */ }
 
@@ -78,7 +78,7 @@ fun MainScreen(
                             verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)
                         ) {
                             Spacer(Modifier.weight(1f))
-                            listOf(MainTab.Timetable, MainTab.News, MainTab.Profile).forEach { tab ->
+                            MainTab.items.forEach { tab ->
                                 NavigationRailItem(
                                     selected = currentTab == tab,
                                     onClick = { currentTab = tab },
@@ -98,14 +98,14 @@ fun MainScreen(
                         when (currentTab) {
                             MainTab.News -> TopAppBar(title = { Text(stringResource(R.string.news)) })
                             MainTab.Profile -> TopAppBar(title = { Text(stringResource(R.string.me)) })
-                            MainTab.Timetable -> { /* 内容由 TimetableScreen 内部控制，此处不放东西 */
-                            }
+                            MainTab.Timetable -> { /* 内容由 TimetableScreen 内部控制，此处不放东西 */ }
+                            MainTab.Today -> { /* 今日课程页无TopAppBar */ }
                         }
                     },
                     bottomBar = {
                         if (!useNavRail) {
                             NavigationBar {
-                                listOf(MainTab.Timetable, MainTab.News, MainTab.Profile).forEach { tab ->
+                                MainTab.items.forEach { tab ->
                                     NavigationBarItem(
                                         selected = currentTab == tab,
                                         onClick = { currentTab = tab },
@@ -119,6 +119,13 @@ fun MainScreen(
                 ) { innerPadding ->
                     Box(Modifier.fillMaxSize()) {
                         when (currentTab) {
+                            MainTab.Today -> Box(Modifier.padding(innerPadding)) {
+                                TodayScreen(
+                                    viewModel = timetableViewModel,
+                                    contentPadding = innerPadding,
+                                    windowSize = windowSizeClass.widthSizeClass,
+                                )
+                            }
                             MainTab.Timetable -> TimetableScreen(
                                 viewModel = timetableViewModel,
                                 onImportRequest = { showImportWebView = true },

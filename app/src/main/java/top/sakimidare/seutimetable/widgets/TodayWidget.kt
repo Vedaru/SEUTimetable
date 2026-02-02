@@ -184,10 +184,8 @@ class TodayWidget : GlanceAppWidget() {
 
     @Composable
     private fun CourseItem(course: Course, config: SemesterConfig) {
-        val startTime = config.periods.getOrNull(course.startPeriod - 1)?.start?.toString() ?: ""
-        val endTime =
-            config.periods.getOrNull(course.startPeriod + course.duration - 2)?.end?.toString()
-                ?: ""
+        val startTime = course.getStartTime(config)?.toString() ?: ""
+        val endTime =course.getEndTime(config)?.toString() ?: ""
 
         Box(
             modifier = GlanceModifier.padding(vertical = 8.dp)

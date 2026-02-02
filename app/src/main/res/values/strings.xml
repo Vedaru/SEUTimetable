@@ -112,4 +112,5 @@
     <string name="loading_failed_click_to_retry">Loading failed. Click to retry</string>
     <string name="loading_failed_prefix">Loading failed</string>
     <string name="not_in_current_week">Not in Current Week</string>
+    <string name="today">Today</string>
 </resources>

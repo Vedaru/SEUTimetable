@@ -30,11 +30,12 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
+private const val TAG = "TimetableViewModel"
+
 class TimetableViewModel(
     private val courseRepository: CourseRepository,
     private val prefRepository: UserPreferenceRepository
 ) : ViewModel() {
-
     // --- 免责声明 ---
     val isDisclaimerAccepted = prefRepository.isDisclaimerAccepted
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
@@ -275,6 +276,7 @@ class TimetableViewModel(
             pendingImport = PendingImport(metadata, courses)
         } catch (e: Exception) {
             isNavigatingToNewTable = false
+            Log.e(TAG, "Failed to parse imported json", e)
             importErrorMessage = e.message ?: "解析失败"
         } finally {
             isImporting = false
@@ -290,6 +292,7 @@ class TimetableViewModel(
                 pendingImport = null
                 isNavigatingToNewTable = false
             } catch (e: Exception) {
+                Log.e(TAG, "Failed to save table", e)
                 importErrorMessage = "保存失败"
             }
         }
