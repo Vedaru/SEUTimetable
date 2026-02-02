@@ -1,62 +1,90 @@
 package top.sakimidare.seutimetable.ui.timetable.view.components
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun TimetableHeader(
     modifier: Modifier = Modifier,
     currentWeek: Int,
-    startDate: java.time.LocalDate,
-    sortedVisibleDays: List<java.time.DayOfWeek>,
-    timeLabelWidth: androidx.compose.ui.unit.Dp,
-    titleHeight: androidx.compose.ui.unit.Dp,
-    locale: java.util.Locale = java.util.Locale.getDefault(),
-
+    startDate: LocalDate,
+    sortedVisibleDays: List<DayOfWeek>,
+    timeLabelWidth: Dp,
+    titleHeight: Dp,
+    locale: Locale = Locale.getDefault(),
 ) {
-    // 💡 内部逻辑：根据当前周和学期起点计算 7 天日期
-    val dates = remember(currentWeek, startDate) {
-        val startMonday = startDate.with(java.time.DayOfWeek.MONDAY)
-        val targetMonday = startMonday.plusWeeks((currentWeek - 1).toLong())
-        (0..6).map { targetMonday.plusDays(it.toLong()) }
+    // 💡 1. 逻辑抽离：计算本周每一天对应的真实日期
+    val weekDates = remember(currentWeek, startDate) {
+        val weekStart = startDate.plusWeeks((currentWeek - 1).toLong())
+            .with(DayOfWeek.MONDAY)
+        (0..6).associateBy { DayOfWeek.of(it + 1) }
+            .mapValues { weekStart.plusDays((it.key.value - 1).toLong()) }
     }
 
-    Row(modifier = modifier.fillMaxWidth()) {
-        // 左侧节次栏占位
-        Spacer(modifier = Modifier.width(timeLabelWidth))
+    val today = remember { LocalDate.now() }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(titleHeight)
+            .background(MaterialTheme.colorScheme.surface) // 确保有背景色遮盖底部滚动
+    ) {
+        // 左侧节次栏的上方空白占位
+        Box(modifier = Modifier.width(timeLabelWidth))
 
         sortedVisibleDays.forEach { day ->
-            // DayOfWeek.MONDAY.value 是 1，所以对应索引是 day.value - 1
-            val dateOfThisDay = dates[day.value - 1]
-            val isToday = dateOfThisDay == java.time.LocalDate.now()
+            val dateOfThisDay = weekDates[day] ?: today
+            val isToday = dateOfThisDay == today
 
+            // 💡 2. 使用 Box + 权重，确保每一列严格对齐网格
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .height(titleHeight),
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // 星期几 (如：周一)
+                // 星期文字
                 Text(
-                    text = day.getDisplayName(java.time.format.TextStyle.SHORT, locale),
+                    text = day.getDisplayName(TextStyle.SHORT, locale),
                     style = MaterialTheme.typography.labelMedium,
+                    fontWeight = if (isToday) FontWeight.Bold else FontWeight.Medium,
                     color = if (isToday) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                // 具体日期 (如：01/28)
-                Text(
-                    text = String.format("%02d/%02d", dateOfThisDay.monthValue, dateOfThisDay.dayOfMonth),
-                    style = MaterialTheme.typography.labelSmall,
+                Spacer(modifier = Modifier.height(2.dp))
+
+                // 💡 3. 日期部分：增加“胶囊”背景或圆形高亮（MD3 典型风格）
+                Surface(
+                    shape = CircleShape,
                     color = if (isToday) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.outline,
-                    fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
-                )
+                    else Color.Transparent,
+                    contentColor = if (isToday) MaterialTheme.colorScheme.onPrimary
+                    else MaterialTheme.colorScheme.outline
+                ) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        text = "${dateOfThisDay.monthValue}/${dateOfThisDay.dayOfMonth}",
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
+                        fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
+                    )
+                }
             }
         }
     }

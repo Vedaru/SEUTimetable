@@ -1,4 +1,4 @@
-package top.sakimidare.seutimetable.ui.timetable.view.components
+package top.sakimidare.seutimetable.ui.timetable.view.grid
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
