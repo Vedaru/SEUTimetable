@@ -121,4 +121,22 @@
     <string name="break_time">Break</string>
     <string name="enjoy_your_vacation">Enjoy your vacation</string>
     <string name="outside_semester_time">It\'s currently outside of the semester</string>
+    <string name="no_table_active">No table active</string>
+    <string name="table_management">Table Management</string>
+    <string name="switch_table">Switch Table</string>
+    <string name="settings">Settings</string>
+    <string name="appearance_theme">Appearance theme</string>
+    <string name="widget_settings">Widget settings</string>
+    <string name="language_setting">Language</string>
+    <string name="about_app">About App</string>
+    <string name="welcome_user">Hello!</string>
+    <string name="study_statistics">This semester you have already attended %1$d classes, totaling %2$.2f hours.</string>
+    <string name="follow_system">Follow system</string>
+    <string name="display_settings">Display Settings</string>
+    <string name="show_timeline">Show Timeline</string>
+    <string name="show_date">Show date on the header</string>
+    <string name="show_period_time">Show Period Time</string>
+    <string name="show_non_current_week">Show courses not scheduled for this week</string>
+    <string name="general_settings">General Settings</string>
+    <string name="about_content">Here is the about text (TODO)</string>
 </resources>

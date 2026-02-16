@@ -122,4 +122,22 @@
     <string name="break_time">休み時間</string>
     <string name="enjoy_your_vacation">休暇を楽しんで</string>
     <string name="outside_semester_time">現在は学期期間外です</string>
+    <string name="no_table_active">時間割なし</string>
+    <string name="table_management">時間割管理</string>
+    <string name="switch_table">時間割切り替え</string>
+    <string name="settings">設定</string>
+    <string name="appearance_theme">外観テーマ</string>
+    <string name="widget_settings">ウィジェット設定</string>
+    <string name="language_setting">言語</string>
+    <string name="about_app">アプリについて</string>
+    <string name="welcome_user">こんにちは！</string>
+    <string name="study_statistics">今学期、あなたはすでに %1$d クラスに出席しており、合計 %2$.2f 時間です。</string>
+    <string name="follow_system">システム設定に従う</string>
+    <string name="display_settings">表示設定</string>
+    <string name="show_timeline">タイムラインを表示</string>
+    <string name="show_date">表のヘッダーに日付を表​​示</string>
+    <string name="show_period_time">コースタイムを表示</string>
+    <string name="show_non_current_week">今週以外のコースを表示</string>
+    <string name="general_settings">一般設定</string>
+    <string name="about_content">TODO</string>
 </resources>

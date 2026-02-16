@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.core.animation)
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

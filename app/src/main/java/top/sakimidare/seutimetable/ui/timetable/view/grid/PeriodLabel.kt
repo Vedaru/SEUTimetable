@@ -27,13 +27,16 @@ fun PeriodLabelPreview() {
 @Composable
 fun PeriodLabel(
     period: Period,
-    isActive: Boolean = false // 💡 由 Grid 根据时间计算后传入
+    isActive: Boolean = false, // 💡 由 Grid 根据时间计算后传入
+    showPeriodTime: Boolean = true
 ) {
     val timeFormatter = remember { DateTimeFormatter.ofPattern("HH:mm") }
 
     // 根据激活状态动态计算样式
-    val mainColor = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-    val subColor = if (isActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
+    val mainColor =
+        if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+    val subColor =
+        if (isActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
     val fontWeight = if (isActive) FontWeight.Bold else FontWeight.Normal
 
     Column(
@@ -47,20 +50,20 @@ fun PeriodLabel(
             color = mainColor,
             fontWeight = fontWeight
         )
-
-        Spacer(modifier = Modifier.height(2.dp))
-
-        Text(
-            text = period.start.format(timeFormatter),
-            style = MaterialTheme.typography.labelSmall,
-            color = subColor,
-            fontWeight = fontWeight
-        )
-        Text(
-            text = period.end.format(timeFormatter),
-            style = MaterialTheme.typography.labelSmall,
-            color = subColor,
-            fontWeight = fontWeight
-        )
+        if (showPeriodTime) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = period.start.format(timeFormatter),
+                style = MaterialTheme.typography.labelSmall,
+                color = subColor,
+                fontWeight = fontWeight
+            )
+            Text(
+                text = period.end.format(timeFormatter),
+                style = MaterialTheme.typography.labelSmall,
+                color = subColor,
+                fontWeight = fontWeight
+            )
+        }
     }
 }

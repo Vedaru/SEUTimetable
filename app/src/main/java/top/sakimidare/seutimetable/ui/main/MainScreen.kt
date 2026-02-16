@@ -74,7 +74,7 @@ private fun MainScaffoldContent(
             topBar = {
                 when (currentTab) {
                     MainTab.News -> TopAppBar(title = { Text(stringResource(R.string.news)) })
-                    MainTab.Profile -> TopAppBar(title = { Text(stringResource(R.string.me)) })
+                    MainTab.Profile -> TopAppBar(title = { /*Text(stringResource(R.string.me))*/ })
                     MainTab.Timetable -> { /* 内容由 TimetableScreen 内部控制，此处不放东西 */
                     }
 
@@ -139,7 +139,7 @@ fun MainTabContent(
             }
 
             MainTab.Profile -> Box(Modifier.padding(contentPadding)) {
-                ProfileScreen()
+                ProfileScreen(windowSizeClass = windowSizeClass)
             }
         }
     }

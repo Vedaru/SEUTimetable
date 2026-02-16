@@ -1,4 +1,5 @@
 package top.sakimidare.seutimetable.ui.timetable.view.components
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +28,7 @@ fun TimetableHeader(
     timeLabelWidth: Dp,
     titleHeight: Dp,
     locale: Locale = Locale.getDefault(),
+    showDate: Boolean = true,
 ) {
     // 💡 1. 逻辑抽离：计算本周每一天对应的真实日期
     val weekDates = remember(currentWeek, startDate) {
@@ -70,20 +72,22 @@ fun TimetableHeader(
 
                 Spacer(modifier = Modifier.height(2.dp))
 
-                // 💡 3. 日期部分：增加“胶囊”背景或圆形高亮（MD3 典型风格）
-                Surface(
-                    shape = CircleShape,
-                    color = if (isToday) MaterialTheme.colorScheme.primary
-                    else Color.Transparent,
-                    contentColor = if (isToday) MaterialTheme.colorScheme.onPrimary
-                    else MaterialTheme.colorScheme.outline
-                ) {
-                    Text(
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                        text = "${dateOfThisDay.monthValue}/${dateOfThisDay.dayOfMonth}",
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
-                        fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
-                    )
+                if (showDate) {
+                    // 💡 3. 日期部分：增加“胶囊”背景或圆形高亮（MD3 典型风格）
+                    Surface(
+                        shape = CircleShape,
+                        color = if (isToday) MaterialTheme.colorScheme.primary
+                        else Color.Transparent,
+                        contentColor = if (isToday) MaterialTheme.colorScheme.onPrimary
+                        else MaterialTheme.colorScheme.outline
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            text = "${dateOfThisDay.monthValue}/${dateOfThisDay.dayOfMonth}",
+                            style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
+                            fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
+                        )
+                    }
                 }
             }
         }

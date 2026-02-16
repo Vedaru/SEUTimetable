@@ -23,7 +23,8 @@ fun GridBackgroundLayer(
     config: SemesterConfig,
     periodHeight: Dp,
     timeLabelWidth: Dp,
-    activePeriodIndex: Int
+    activePeriodIndex: Int,
+    showPeriodTime: Boolean = true
 ) {
     Column {
         config.periods.forEachIndexed { index, period ->
@@ -35,7 +36,7 @@ fun GridBackgroundLayer(
                         .background(if (isActive) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent),
                     contentAlignment = Alignment.Center
                 ) {
-                    PeriodLabel(period = period, isActive = isActive)
+                    PeriodLabel(period = period, isActive = isActive, showPeriodTime = showPeriodTime)
                 }
                 // 网格线
                 repeat(config.visibleDays.size) {

@@ -25,6 +25,7 @@ import top.sakimidare.seutimetable.data.model.Period
 import top.sakimidare.seutimetable.data.model.SemesterConfig
 import top.sakimidare.seutimetable.data.model.TableMetadata
 import top.sakimidare.seutimetable.data.repository.CourseRepository
+import top.sakimidare.seutimetable.data.repository.DisplayPreferences
 import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
 import java.time.LocalDate
 import java.time.LocalTime
@@ -56,6 +57,18 @@ class TimetableViewModel(
         _isInternalWeekUpdate = false
     }
 
+    val displayPrefs = combine(
+        prefRepository.showTimelineFlow,
+        prefRepository.showDateFlow,
+        prefRepository.showPeriodTimeFlow,
+        prefRepository.showNonCurrentWeekFlow
+    ) { timeline, header, time, nonCurrent->
+        DisplayPreferences(timeline, header, time, nonCurrent)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = DisplayPreferences()
+    )
     /* -------------------------------------------------------
        1. 核心数据源 (Data Sources)
     ------------------------------------------------------- */
@@ -194,6 +207,58 @@ class TimetableViewModel(
         courses.maxOfOrNull { it.startPeriod + it.duration - 1 } ?: 0
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
+    // --- 在 TimetableViewModel 类内部添加 ---
+
+    /** * 统计信息：(已上课节数, 累计小时数)
+     */
+    val studyStatistics = combine(
+        currentTableCourses,
+        actualCurrentWeek,
+        semesterConfig,
+        currentTime
+    ) { courses, currentWeek, config, now ->
+        if (currentWeek == null || currentWeek < 1) return@combine Pair(0, 0f)
+
+        var totalLessons = 0
+        var totalMinutes = 0L
+        val today = LocalDate.now().dayOfWeek
+
+        courses.forEach { course ->
+            // 1. 计算【过去周次】的累积
+            val pastWeeksCount = (1 until currentWeek).count { w -> course.weekRule.matches(w) }
+
+            // 2. 计算【本周】是否已经上过或正在上
+            val isOccurredThisWeek = if (course.weekRule.matches(currentWeek)) {
+                when {
+                    // 今天之前上的课
+                    course.dayOfWeek.value < today.value -> 1
+                    // 今天正在上或刚上完的课
+                    course.dayOfWeek == today -> {
+                        val lastPeriodEnd = config.periods.getOrNull(course.startPeriod + course.duration - 2)?.end
+                        if (lastPeriodEnd != null && now.isAfter(lastPeriodEnd)) 1 else 0
+                    }
+                    else -> 0
+                }
+            } else 0
+
+            val totalOccurrences = pastWeeksCount + isOccurredThisWeek
+
+            // 3. 统计节数
+            totalLessons += (totalOccurrences * course.duration)
+
+            // 4. 精准统计分钟数（累加每一小节，避开课间休息）
+            var singleCourseRealMinutes = 0L
+            for (i in 0 until course.duration) {
+                val p = config.periods.getOrNull(course.startPeriod - 1 + i)
+                if (p != null) {
+                    singleCourseRealMinutes += java.time.Duration.between(p.start, p.end).toMinutes()
+                }
+            }
+            totalMinutes += (totalOccurrences * singleCourseRealMinutes)
+        }
+
+        Pair(totalLessons, totalMinutes.toFloat() / 60f)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Pair(0, 0f))
     /* -------------------------------------------------------
        4. 逻辑初始化与周次校准
     ------------------------------------------------------- */

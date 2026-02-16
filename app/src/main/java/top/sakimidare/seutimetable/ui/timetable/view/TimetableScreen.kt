@@ -52,6 +52,13 @@ fun TimetableScreen(
     val currentWeek by viewModel.currentWeek.collectAsState()
     val allTables by viewModel.allTables.collectAsState(initial = emptyList())
     val activePeriodIndex by viewModel.activePeriodIndex.collectAsState() // 💡 获取当前活跃节次
+    val displayPrefs by viewModel.displayPrefs.collectAsState()
+
+    val showTimeline = displayPrefs.showTimeline
+    val showDate = displayPrefs.showDate
+    val showPeriodTime = displayPrefs.showPeriodTime
+    val showNonCurrentWeek = displayPrefs.showNonCurrentWeek
+
 
     // --- 2. 状态管理 ---
     var uiState by remember { mutableStateOf(TimetableUiState()) }
@@ -143,7 +150,10 @@ fun TimetableScreen(
                     TimetableGrid(
                         tableMetadata = currentTable, // 使用稳定引用
                         courses = currentTableCourses,
-                        showNonCurrentWeek = true,
+                        showNonCurrentWeek = showNonCurrentWeek,
+                        showTimeLine = showTimeline,
+                        showDate = showDate,
+                        showPeriodTime = showPeriodTime,
                         currentWeek = pageIndex + 1,
                         activePeriodIndex = if (pageIndex + 1 == currentWeek) activePeriodIndex else -1,
                         onCourseClick = { course ->

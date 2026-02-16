@@ -63,6 +63,8 @@ fun TimetableGrid(
     currentWeek: Int,
     showNonCurrentWeek: Boolean = false,
     showTimeLine: Boolean = true,
+    showDate: Boolean = true,
+    showPeriodTime: Boolean = true,
     onCourseClick: (Course) -> Unit,
     activePeriodIndex: Int = -1,
     minPeriodHeight: Dp = 60.dp,
@@ -95,13 +97,14 @@ fun TimetableGrid(
                 sortedVisibleDays = sortedVisibleDays,
                 timeLabelWidth = timeLabelWidth,
                 titleHeight = titleHeight,
-                locale = locale
+                locale = locale,
+                showDate = showDate
             )
 
             // --- 核心网格区 ---
             Box(modifier = Modifier.fillMaxWidth()) {
                 // A. 底层网格
-                GridBackgroundLayer(config, periodHeight, timeLabelWidth, activePeriodIndex)
+                GridBackgroundLayer(config, periodHeight, timeLabelWidth, activePeriodIndex, showPeriodTime)
 
                 if (showTimeLine) {
                     // B. 中层时间指示线

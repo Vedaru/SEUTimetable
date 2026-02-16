@@ -122,4 +122,22 @@
     <string name="break_time">课间休息</string>
     <string name="enjoy_your_vacation">享受假期吧</string>
     <string name="outside_semester_time">当前不在学期时间内</string>
+    <string name="welcome_user">同学你好！</string>
+    <string name="study_statistics">在这个学期你已经上了 %1$d 节课，累计上课 %2$.2f 小时</string>
+    <string name="no_table_active">当前无课表</string>
+    <string name="table_management">管理课表</string>
+    <string name="switch_table">切换课表</string>
+    <string name="settings">设置</string>
+    <string name="appearance_theme">主题</string>
+    <string name="widget_settings">小组件设置</string>
+    <string name="language_setting">语言</string>
+    <string name="about_app">关于</string>
+    <string name="follow_system">跟随系统</string>
+    <string name="display_settings">显示设置</string>
+    <string name="show_timeline">显示时间线</string>
+    <string name="show_date">在表头显示日期</string>
+    <string name="show_period_time">显示课程时间</string>
+    <string name="show_non_current_week">显示非本周课程</string>
+    <string name="general_settings">通用设置</string>
+    <string name="about_content">施工中</string>
 </resources>
