@@ -25,4 +25,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "SEU Timetable"
 include(":app")
- 
