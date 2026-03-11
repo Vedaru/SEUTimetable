@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spanish translations (placeholders copied from English) -->
+    <string name="app_name">SEU Timetable</string>
+    <string name="disclaimer_title">Términos de Servicio y Descargo de Responsabilidad</string>
+    <string name="disclaimer_content">
+        Bienvenido a SEUTimetable. Antes de continuar, por favor lee y comprende los siguientes términos:
+        
+        1. Uso de datos: Esta aplicación proporciona funciones de gestión de horarios únicamente. Tus credenciales de inicio de sesión y datos de cursos obtenidos se almacenan localmente en tu dispositivo. La aplicación no carga, transfiere ni comparte tus datos personales con servidores de terceros.
+        
+        2. Estado no oficial: Este es un proyecto personal de código abierto y NO un cliente oficial publicado por la Universidad del Sureste (SEU).
+        
+        3. Riesgos de extracción: La aplicación obtiene datos simulando el comportamiento de un navegador. El proceso depende de la estabilidad del sistema de la universidad. Los desarrolladores no son responsables de fallos de importación, datos faltantes o errores causados por mantenimiento del sistema, actualizaciones o problemas de red.
+        
+        4. Responsabilidad del usuario: Por favor consulta el sistema oficial de Administración Académica para información autorizada. Los desarrolladores no son responsables de clases perdidas, exámenes o cualquier otra pérdida causada por depender de esta aplicación.
+        
+        5. Licencia de código abierto: Este proyecto está licenciado bajo la Licencia Apache 2.0. Puedes descargar o contribuir siempre que lo uses dentro del alcance de las leyes y regulaciones universitarias.
+        
+        Al hacer clic en "Aceptar", reconoces que has leído y aceptado estos términos.
+    </string>
+    <string name="accept_and_continue">Aceptar y continuar</string>
+    <string name="decline_and_exit">Rechazar y salir</string>
+    <string name="timetable">Horario</string>
+    <string name="news">Noticias</string>
+    <string name="me">Yo</string>
+    <string name="current_week">Semana %d</string>
+    <string name="period_index">Periodo %d</string>
+    <string name="last_week">Semana anterior</string>
+    <string name="next_week">Semana siguiente</string>
+    <string name="back">Atrás</string>
+    <string name="add_new_course">Agregar nuevo curso</string>
+    <string name="time_conflict">Conflicto de horario</string>
+    <string name="save">Guardar</string>
+    <string name="course_name">Nombre del curso</string>
+    <string name="teacher">Profesor</string>
+    <string name="place">Lugar</string>
+    <string name="class_time">Hora de clase</string>
+    <string name="course_already_existed_during_this_period">El siguiente curso ya existe durante este período: %1$s</string>
+    <string name="weekly_repetition_rules">Reglas de repetición semanal</string>
+    <string name="customize">Personalizar</string>
+    <string name="display_color">Color de visualización</string>
+    <string name="notes">Notas</string>
+    <string name="notes_hint">Cursos electivos, recordatorios de exámenes, etc.</string>
+    <string name="select_class_weeks">Seleccionar semanas de clase</string>
+    <string name="clear">Borrar</string>
+    <string name="manage_timetable">Administrar horarios</string>
+    <string name="end_of_info">-- El fin --</string>
+    <string name="import_from">Importar desde el AAO</string>
+    <string name="auto_import">Importar automáticamente los horarios del sistema académico de SEU</string>
+    <string name="add_single_course">Agregar un solo curso</string>
+    <string name="add_manually">Agregar manualmente un curso que no ofrece el AAO</string>
+    <string name="switch_timetable">Cambiar horario</string>
+    <string name="switch_between">Cambiar entre diferentes semestres o múltiples horarios</string>
+    <string name="create_a_blank_timetable">Crear un horario en blanco</string>
+    <string name="plan_from_scratch">Planifica tu horario desde cero</string>
+    <string name="no_timetables_yet">Aún no hay horarios</string>
+    <string name="import_timetable">Importar un horario</string>
+    <string name="starting_period">Periodo inicial</string>
+    <string name="lasting_periods">Periodos de duración</string>
+    <string name="every_week">Semanal</string>
+    <string name="odd_week">Semana impar</string>
+    <string name="even_week">Semana par</string>
+    <string name="week_number">Semana</string>
+    <string name="edit_course">Editar curso</string>
+    <string name="custom_weeks_format">Semana %1$s</string>
+    <string name="period_number">Periodo</string>
+    <string name="custom_periods_format">%1$s / Periodo %2$d-%3$d</string>
+    <string name="delete">Eliminar</string>
+    <string name="timetable_name">Nombre del horario</string>
+    <string name="type_name">Escribe el nombre…</string>
+    <string name="name_cannot_be_empty">El nombre no puede estar vacío</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="select_all">Seleccionar todo</string>
+    <string name="currently_using">Horario actual</string>
+    <string name="delete_timetable">Eliminar horario</string>
+    <string name="delete_permanently">Eliminar horario permanentemente</string>
+    <string name="week_starting_date">%1$d semanas · %2$s</string>
+    <string name="operating_menu">Menú operativo</string>
+    <string name="top">Arriba</string>
+    <string name="delete_permanently_warning">¡La operación no se puede deshacer!</string>
+    <string name="create_a_table_name">Dale un nombre a tu nuevo horario</string>
+    <string name="delete_table_warning">¿Estás seguro de que deseas eliminar el horario "%1$s"? Esta operación eliminará permanentemente todos los cursos bajo este horario y no se puede deshacer.</string>
+    <string name="delete_course">Eliminar curso</string>
+    <string name="delete_course_warning">¿Estás seguro de que deseas eliminar "%1$s" del horario?</string>
+    <string name="show_weekends">Mostrar fines de semana</string>
+    <string name="total_week_number">%1$d semanas</string>
+    <string name="week_number_in_a_semester">Número de semanas</string>
+    <string name="school_start_date">Fecha del primer lunes</string>
+    <string name="add">Agregar</string>
+    <string name="schedule">Horario</string>
+    <string name="nth_class">Sección %1$d</string>
+    <string name="time_conflict_warning">Conflicto de tiempo: por favor revisa las secciones marcadas en rojo.</string>
+    <string name="sub">Menos</string>
+    <string name="plus">Más</string>
+    <string name="not_specified">No especificado</string>
+    <string name="location_not_specified">Ubicación no especificada</string>
+    <string name="teacher_not_specified">Profesor no especificado</string>
+    <string name="no_weeks_selected">No se seleccionaron semanas</string>
+    <string name="click_me_when_you_see_the_timetable">Haz clic cuando veas el horario</string>
+    <string name="edit_semester_config">Editar configuración del semestre</string>
+    <string name="extracting_timetable">Extrayendo horario…</string>
+    <string name="login_title">Iniciar sesión en el AAO de SEU</string>
+    <string name="period_count_too_small_warning">Advertencia: el número total de sesiones (%1$d) es menor que el número máximo de sesiones seleccionadas (%2$d). ¡Los cursos que excedan este límite se ocultarán!</string>
+    <string name="edit_config_hint">Modifica el número de semanas, la hora de las sesiones y la fecha de inicio</string>
+    <string name="one_week_at_least">Por favor selecciona al menos una semana</string>
+    <string name="course_conflict_format">%1$s y %2$d más</string>
+    <string name="import_failed">Importación fallida: %1$s</string>
+    <string name="widget_today_desc">Cursos de hoy</string>
+    <string name="widget_week_desc">Cursos de esta semana</string>
+    <string name="no_courses_today">No hay cursos hoy. Relájate.</string>
+    <string name="section_format">Sección %1$d-%2$d</string>
+    <string name="no_shortcut_for_creating_widgets">Tu lanzador no admite agregar widgets mediante atajos.</string>
+    <string name="add_to_launcher_hint">Si no ves el widget en tu escritorio después de hacer clic, es posible que debas otorgar permisos de "acceso directo de escritorio" en tu configuración</string>
+    <string name="add_to_launcher">Agregar widget "Cursos de hoy" a tu pantalla de inicio</string>
+    <string name="table_name_cannot_be_empty">El nombre del horario no puede estar vacío</string>
+    <string name="reduce_weeks_warning">Reducir el número de semanas puede resultar en que algunos cursos se recorten y no estén disponibles</string>
+    <string name="extend_weeks_warning">Aumentar el número de semanas cambiará la cobertura de los cursos "semanal/semana impar/semana par".</string>
+    <string name="refresh">Refrescar</string>
+    <string name="loading_failed_click_to_retry">Carga fallida. Haz clic para reintentar</string>
+    <string name="loading_failed_prefix">Carga fallida</string>
+    <string name="not_in_current_week">No en la semana actual</string>
+    <string name="today">Hoy</string>
+    <string name="next_course">Próximo curso</string>
+    <string name="upcoming">Próximo</string>
+    <string name="having_lesson">En curso</string>
+    <string name="courses_today">Cursos hoy</string>
+    <string name="nav_go_to_timetable">Ir al horario</string>
+    <string name="break_time">Descanso</string>
+    <string name="enjoy_your_vacation">Disfruta tus vacaciones</string>
+    <string name="outside_semester_time">Actualmente fuera del semestre</string>
+    <string name="no_table_active">No hay horario activo</string>
+    <string name="table_management">Gestión del horario</string>
+    <string name="switch_table">Cambiar horario</string>
+    <string name="settings">Configuración</string>
+    <string name="appearance_theme">Tema de apariencia</string>
+    <string name="widget_settings">Configuración del widget</string>
+    <string name="language_setting">Idioma</string>
+    <string name="about_app">Acerca de la aplicación</string>
+    <string name="welcome_user">¡Hola!</string>
+    <string name="study_statistics">Este semestre ya has asistido a %1$d clases, un total de %2$.2f horas.</string>
+    <string name="follow_system">Seguir sistema</string>
+    <string name="theme_setting">Tema</string>
+    <string name="light">Claro</string>
+    <string name="dark">Oscuro</string>
+    <string name="display_settings">Configuración de pantalla</string>
+    <string name="show_timeline">Mostrar cronograma</string>
+    <string name="show_date">Mostrar fecha en el encabezado</string>
+    <string name="show_period_time">Mostrar hora de período</string>
+    <string name="show_non_current_week">Mostrar cursos fuera de la semana actual</string>
+    <string name="general_settings">Ajustes generales</string>
+    <string name="about_content">Aquí va el texto sobre la aplicación (TODO)</string>
+</resources>

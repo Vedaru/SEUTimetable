@@ -43,10 +43,10 @@ class ProfileViewModel(
         val showNonCurrentWeek = flows[8] as Boolean
 
         val langName = when {
-            langTag.isEmpty() -> "Follow System" // 或者 stringResource 处理，稍后说明
+            langTag.isEmpty() -> "Follow System" // or use stringResource for localization if needed
             langTag.contains("ja", ignoreCase = true) -> "日本語"
             langTag.contains("zh", ignoreCase = true) -> "简体中文"
-            langTag.contains("en", ignoreCase = true) -> "English"
+            langTag.contains("es", ignoreCase = true) -> "Español"
             else -> "English"
         }
 

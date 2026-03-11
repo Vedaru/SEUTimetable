@@ -194,7 +194,8 @@ fun LanguagePickerDialog(
                     stringResource(R.string.follow_system) to "", // 用空字符串代表跟随系统
                     "简体中文" to "zh-CN",
                     "English" to "en",
-                    "日本語" to "ja"
+                    "日本語" to "ja",
+                    "Español" to "es"
                 )
 
                 languages.forEach { (name, tag) ->

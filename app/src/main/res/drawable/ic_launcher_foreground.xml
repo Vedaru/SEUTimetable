@@ -4,26 +4,31 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- 绘制一个带圆角的课程表主体框架，使用东大金 (#FFD700) -->
+    <!-- 圆形课表元素：四个金色圆点 -->
     <path
         android:fillColor="#FFD700"
-        android:pathData="M30,35 L78,35 C80.2,35 82,36.8 82,39 L82,75 C82,77.2 80.2,79 78,79 L30,79 C27.8,79 26,77.2 26,75 L26,39 C26,36.8 27.8,35 30,35 Z" />
+        android:pathData="M36,36 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0" />
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M72,36 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0" />
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M36,72 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0" />
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M72,72 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0" />
 
-    <!-- 顶部书脊细节，稍深一点的金 -->
+    <!-- 外圈小圆点作为边框装饰 -->
     <path
-        android:fillColor="#E6C200"
-        android:pathData="M30,35 L78,35 L78,40 L30,40 Z" />
-
-    <!-- 内部课程格子，使用东大绿 (#006633) 反衬 -->
+        android:fillColor="#FFD700"
+        android:pathData="M54,18 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
     <path
-        android:fillColor="#006633"
-        android:pathData="M32,45h10v6h-10z M44,45h10v6h-10z M56,45h10v6h-10z M68,45h8v6h-8z" />
+        android:fillColor="#FFD700"
+        android:pathData="M54,90 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
     <path
-        android:fillColor="#006633"
-        android:pathData="M32,54h10v6h-10z M44,54h10v6h-10z M56,54h10v6h-10z M68,54h8v6h-8z" />
-
-    <!-- 标注当前格子，使用白色 -->
+        android:fillColor="#FFD700"
+        android:pathData="M18,54 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M32,63h10v6h-10z" />
+        android:fillColor="#FFD700"
+        android:pathData="M90,54 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
 </vector>
