@@ -42,14 +42,7 @@ class ProfileViewModel(
         val showPeriodTime = flows[7] as Boolean
         val showNonCurrentWeek = flows[8] as Boolean
 
-        val langName = when {
-            langTag.isEmpty() -> "Follow System" // or use stringResource for localization if needed
-            langTag.contains("ja", ignoreCase = true) -> "日本語"
-            langTag.contains("zh", ignoreCase = true) -> "简体中文"
-            langTag.contains("es", ignoreCase = true) -> "Español"
-            else -> "English"
-        }
-
+        // currentLanguageTag is passed to UI, which will resolve a localized display name
 
         ProfileItem.ProfileUiState(
             currentTableName = currentTable?.tableName ?: "",
@@ -64,10 +57,11 @@ class ProfileViewModel(
                         ProfileItem.Action(Icons.Default.Palette, R.string.theme_setting) {
                             sendEvent(ProfileEvent.ShowThemeDialog)
                         },
+                        // trailing string will be computed in composable using resources
                         ProfileItem.Action(
                             Icons.Default.Language,
                             R.string.language_setting,
-                            langName
+                            null // placeholder, filled by UI
                         ) {
                             sendEvent(ProfileEvent.ShowLanguageDialog)
                         }

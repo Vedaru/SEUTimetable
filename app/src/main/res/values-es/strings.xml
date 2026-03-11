@@ -140,6 +140,11 @@
     <string name="welcome_user">¡Hola!</string>
     <string name="study_statistics">Este semestre ya has asistido a %1$d clases, un total de %2$.2f horas.</string>
     <string name="follow_system">Seguir sistema</string>
+    <!-- nombres de idioma (mantener idioma nativo) -->
+    <string name="lang_simplified_chinese">简体中文</string>
+    <string name="lang_english">English</string>
+    <string name="lang_japanese">日本語</string>
+    <string name="lang_spanish">Español</string>
     <string name="theme_setting">Tema</string>
     <string name="light">Claro</string>
     <string name="dark">Oscuro</string>

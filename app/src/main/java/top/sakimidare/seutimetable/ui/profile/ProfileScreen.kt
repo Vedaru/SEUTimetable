@@ -63,17 +63,31 @@ fun ProfileScreen(
     )
 
     val state by profileViewModel.uiState.collectAsState()
-    // attach localized trailing text for theme entry
+    // attach localized trailing text for theme and language entries
     val sections = state.sections.map { section ->
         val items = section.items.map { item ->
-            if (item is ProfileItem.Action && item.labelRes == R.string.theme_setting) {
-                val themeLabel = when (state.currentThemeMode) {
-                    UserPreferenceRepository.ThemeMode.LIGHT -> stringResource(R.string.light)
-                    UserPreferenceRepository.ThemeMode.DARK -> stringResource(R.string.dark)
-                    UserPreferenceRepository.ThemeMode.SYSTEM -> stringResource(R.string.follow_system)
+            when {
+                item is ProfileItem.Action && item.labelRes == R.string.theme_setting -> {
+                    val themeLabel = when (state.currentThemeMode) {
+                        UserPreferenceRepository.ThemeMode.LIGHT -> stringResource(R.string.light)
+                        UserPreferenceRepository.ThemeMode.DARK -> stringResource(R.string.dark)
+                        UserPreferenceRepository.ThemeMode.SYSTEM -> stringResource(R.string.follow_system)
+                    }
+                    item.copy(trailing = themeLabel)
                 }
-                item.copy(trailing = themeLabel)
-            } else item
+                item is ProfileItem.Action && item.labelRes == R.string.language_setting -> {
+                    // convert current tag into a localized display name
+                    val langLabel = when {
+                        state.currentLanguageTag.isEmpty() -> stringResource(R.string.follow_system)
+                        state.currentLanguageTag.contains("ja", ignoreCase = true) -> stringResource(R.string.lang_japanese)
+                        state.currentLanguageTag.contains("zh", ignoreCase = true) -> stringResource(R.string.lang_simplified_chinese)
+                        state.currentLanguageTag.contains("es", ignoreCase = true) -> stringResource(R.string.lang_spanish)
+                        else -> stringResource(R.string.lang_english)
+                    }
+                    item.copy(trailing = langLabel)
+                }
+                else -> item
+            }
         }
         section.copy(items = items)
     }
@@ -192,10 +206,10 @@ fun LanguagePickerDialog(
             ) {
                 val languages = listOf(
                     stringResource(R.string.follow_system) to "", // 用空字符串代表跟随系统
-                    "简体中文" to "zh-CN",
-                    "English" to "en",
-                    "日本語" to "ja",
-                    "Español" to "es"
+                    stringResource(R.string.lang_simplified_chinese) to "zh-CN",
+                    stringResource(R.string.lang_english) to "en",
+                    stringResource(R.string.lang_japanese) to "ja",
+                    stringResource(R.string.lang_spanish) to "es"
                 )
 
                 languages.forEach { (name, tag) ->
