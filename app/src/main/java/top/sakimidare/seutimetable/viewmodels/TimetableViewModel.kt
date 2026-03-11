@@ -281,10 +281,11 @@ class TimetableViewModel(
         val daysBetween = ChronoUnit.DAYS.between(startMonday, today)
         val calculatedWeek = (daysBetween / 7).toInt() + 1
 
-        _currentWeek.value = when {
+        val targetWeek = when {
             today.isBefore(config.startDate) -> 1
             else -> calculatedWeek.coerceIn(1, config.weeks)
         }
+        setWeek(targetWeek, fromPager = false)
     }
 
     /* -------------------------------------------------------

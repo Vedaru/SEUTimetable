@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import top.sakimidare.seutimetable.ui.main.MainTab
 
 class MainViewModel : ViewModel() {
-    // 初始页面设置为 Timetable
-    private val _currentTab = MutableStateFlow<MainTab>(MainTab.Timetable)
+    // 初始页面设置为 Today
+    private val _currentTab = MutableStateFlow<MainTab>(MainTab.Today)
     val currentTab = _currentTab.asStateFlow()
 
     fun updateTab(tab: MainTab) {
