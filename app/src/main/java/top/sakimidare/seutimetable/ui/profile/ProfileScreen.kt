@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +44,16 @@ import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
 import top.sakimidare.seutimetable.viewmodels.ProfileEvent
 import top.sakimidare.seutimetable.viewmodels.ProfileViewModel
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
+
+@Composable
+fun localeNameForCode(code: String): String {
+    return when {
+        code.startsWith("ja", true) -> stringResource(R.string.lang_japanese)
+        code.startsWith("zh", true) -> stringResource(R.string.lang_simplified_chinese)
+        code.startsWith("es", true) -> stringResource(R.string.lang_spanish)
+        else -> stringResource(R.string.lang_english)
+    }
+}
 
 @Composable
 fun ProfileScreen(
@@ -63,6 +74,10 @@ fun ProfileScreen(
     )
 
     val state by profileViewModel.uiState.collectAsState()
+
+
+    // no longer show system language outside; keep follow-system literal
+
     // attach localized trailing text for theme and language entries
     val sections = state.sections.map { section ->
         val items = section.items.map { item ->
@@ -76,7 +91,7 @@ fun ProfileScreen(
                     item.copy(trailing = themeLabel)
                 }
                 item is ProfileItem.Action && item.labelRes == R.string.language_setting -> {
-                    // convert current tag into a localized display name
+                    // convert current tag into a localized display name; empty tag => follow system literal
                     val langLabel = when {
                         state.currentLanguageTag.isEmpty() -> stringResource(R.string.follow_system)
                         state.currentLanguageTag.contains("ja", ignoreCase = true) -> stringResource(R.string.lang_japanese)
@@ -204,8 +219,11 @@ fun LanguagePickerDialog(
                     .fillMaxWidth()
                     .padding(vertical = 0.dp) // 减少内边距
             ) {
+                // compute system language name for trailing label only
+                val configuration = LocalConfiguration.current
+                val systemLangName = localeNameForCode(configuration.locales[0].language ?: "")
                 val languages = listOf(
-                    stringResource(R.string.follow_system) to "", // 用空字符串代表跟随系统
+                    stringResource(R.string.follow_system) to "",
                     stringResource(R.string.lang_simplified_chinese) to "zh-CN",
                     stringResource(R.string.lang_english) to "en",
                     stringResource(R.string.lang_japanese) to "ja",
