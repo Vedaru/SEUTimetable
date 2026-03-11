@@ -133,6 +133,9 @@
     <string name="language_setting">语言</string>
     <string name="about_app">关于</string>
     <string name="follow_system">跟随系统</string>
+    <string name="theme_setting">主题</string>
+    <string name="light">浅色</string>
+    <string name="dark">深色</string>
     <string name="display_settings">显示设置</string>
     <string name="show_timeline">显示时间线</string>
     <string name="show_date">在表头显示日期</string>

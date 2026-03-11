@@ -106,15 +106,6 @@ fun TimetableGrid(
                 // A. 底层网格
                 GridBackgroundLayer(config, periodHeight, timeLabelWidth, activePeriodIndex, showPeriodTime)
 
-                if (showTimeLine) {
-                    // B. 中层时间指示线
-                    TimeIndicatorLine(
-                        periods = config.periods,
-                        periodHeight = periodHeight,
-                        timeLabelWidth = timeLabelWidth
-                    )
-                }
-
                 // C. 顶层课程卡片
                 Row(modifier = Modifier.fillMaxWidth().padding(start = timeLabelWidth)) {
                     sortedVisibleDays.forEach { day ->
@@ -129,6 +120,15 @@ fun TimetableGrid(
                             onCourseClick = onCourseClick
                         )
                     }
+                }
+
+                if (showTimeLine) {
+                    // B. 中层时间指示线 — 放在最顶层保证始终可见
+                    TimeIndicatorLine(
+                        periods = config.periods,
+                        periodHeight = periodHeight,
+                        timeLabelWidth = timeLabelWidth
+                    )
                 }
             }
         }

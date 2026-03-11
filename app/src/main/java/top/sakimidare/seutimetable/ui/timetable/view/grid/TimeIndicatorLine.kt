@@ -46,26 +46,30 @@ fun TimeIndicatorLine(
 
     // 3. 渲染
     yOffset?.let { offset ->
+        // debug log actual offset for troubleshooting
+        android.util.Log.d("TimeIndicatorLine", "render offset=$offset at time=$currentTime")
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = timeLabelWidth) // 避开左侧节次栏
                 .offset(y = offset - 1.dp) // 减去高度的一半使其居中
-                .zIndex(3f) // 确保在课程卡片之上
+                // zIndex maintained for safety, but indicator now rendered after courses
+                .zIndex(5f)
         ) {
-            // 指示线本体
+            // 指示线本体（选用 error 颜色以区别课程卡色）
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
-                thickness = 2.dp,
-                color = MaterialTheme.colorScheme.primary
+                thickness = 3.dp, // 稍粗一点
+                color = MaterialTheme.colorScheme.error
             )
 
             // 💡 MD3 细节：在最左侧画一个小圆点，指示感更强
             Box(
                 modifier = Modifier
-                    .size(6.dp)
-                    .offset(x = (-3).dp, y = (-2).dp)
-                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+                    .size(8.dp)
+                    .offset(x = (-4).dp, y = (-3).dp)
+                    .background(MaterialTheme.colorScheme.error, CircleShape)
             )
         }
     }

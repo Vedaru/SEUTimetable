@@ -18,7 +18,11 @@ object TimetableGridUtils {
         val first = periods.first()
         val last = periods.last()
 
-        if (currentTime.isBefore(first.start) || currentTime.isAfter(last.end)) return null
+        // debug: log early exits so we can see why the line vanished
+        if (currentTime.isBefore(first.start) || currentTime.isAfter(last.end)) {
+            android.util.Log.d("TimetableGridUtils", "timeLineOffset: out of bounds, current=$currentTime first=${first.start} last=${last.end}")
+            return null
+        }
 
         for (i in periods.indices) {
             val p = periods[i]
@@ -29,10 +33,12 @@ object TimetableGridUtils {
             } else if (i < periods.size - 1) {
                 val nextP = periods[i + 1]
                 if (currentTime.isAfter(p.end) && currentTime.isBefore(nextP.start)) {
+                    android.util.Log.d("TimetableGridUtils", "timeLineOffset: in break between $p and $nextP at $currentTime")
                     return (i + 1).dp * periodHeight.value
                 }
             }
         }
+        android.util.Log.d("TimetableGridUtils", "timeLineOffset: no matching period found for $currentTime in list $periods")
         return null
     }
 

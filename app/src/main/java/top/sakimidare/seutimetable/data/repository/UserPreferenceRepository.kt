@@ -27,6 +27,7 @@ class UserPreferenceRepository(private val context: Context) {
         val SHOW_DATE_HEADER = booleanPreferencesKey("show_date_header") // 是否显示表头日期
         val SHOW_PERIOD_TIME = booleanPreferencesKey("show_period_time") // 是否显示具体时间点
         val SHOW_NON_CURRENT_WEEK = booleanPreferencesKey("show_non_current_week")
+        val THEME_MODE = androidx.datastore.preferences.core.intPreferencesKey("theme_mode")
     }
 
     // 基础的 DataStore 读取错误处理封装
@@ -61,6 +62,40 @@ class UserPreferenceRepository(private val context: Context) {
     /* -------------------------------------------------------
        2. 全局显示设置 (新增)
     ------------------------------------------------------- */
+
+    /* -------------------------------------------------------
+       3. 主题模式
+       0 = Follow system (default), 1 = Light, 2 = Dark
+    ------------------------------------------------------- */
+    enum class ThemeMode { SYSTEM, LIGHT, DARK }
+
+    val themeModeFlow: Flow<ThemeMode> = dataFlow.map {
+        when (it[PreferencesKeys.THEME_MODE] ?: 0) {
+            1 -> ThemeMode.LIGHT
+            2 -> ThemeMode.DARK
+            else -> ThemeMode.SYSTEM
+        }
+    }
+
+    suspend fun getThemeMode(): ThemeMode {
+        return try {
+            when (context.dataStore.data.first()[PreferencesKeys.THEME_MODE] ?: 0) {
+                1 -> ThemeMode.LIGHT
+                2 -> ThemeMode.DARK
+                else -> ThemeMode.SYSTEM
+            }
+        } catch (e: Exception) {
+            ThemeMode.SYSTEM
+        }
+    }
+
+    suspend fun updateThemeMode(mode: ThemeMode) {
+        context.dataStore.edit { it[PreferencesKeys.THEME_MODE] = when (mode) {
+            ThemeMode.LIGHT -> 1
+            ThemeMode.DARK -> 2
+            ThemeMode.SYSTEM -> 0
+        } }
+    }
 
     // 建议这样写读取逻辑，确保每次都是从最新的 data 中 map 出来的
     val showTimelineFlow: Flow<Boolean> = context.dataStore.data

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.SEUTimetable" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- use DayNight parent so system UI adapts automatically -->
+    <style name="Theme.SEUTimetable" parent="Theme.AppCompat.DayNight.NoActionBar" />
 
     <style name="Theme.TransparentDialog" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>

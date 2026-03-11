@@ -132,6 +132,9 @@
     <string name="welcome_user">Hello!</string>
     <string name="study_statistics">This semester you have already attended %1$d classes, totaling %2$.2f hours.</string>
     <string name="follow_system">Follow system</string>
+    <string name="theme_setting">Theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
     <string name="display_settings">Display Settings</string>
     <string name="show_timeline">Show Timeline</string>
     <string name="show_date">Show date on the header</string>

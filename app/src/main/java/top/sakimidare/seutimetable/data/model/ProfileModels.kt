@@ -8,7 +8,9 @@ sealed class ProfileItem {
         val currentTableName: String = "",
         val completedLessons: Int = 0,    // 已上课程数
         val totalHours: Float = 0f,          // 累计小时
-        val currentLanguageTag: String = "zh-Hans"
+        val currentLanguageTag: String = "zh-Hans",
+        val currentThemeMode: top.sakimidare.seutimetable.data.repository.UserPreferenceRepository.ThemeMode =
+            top.sakimidare.seutimetable.data.repository.UserPreferenceRepository.ThemeMode.SYSTEM
     )
     data class Action(
         val icon: ImageVector,

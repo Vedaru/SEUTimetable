@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -35,17 +36,25 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun SEUTimetableTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    themeMode: UserPreferenceRepository.ThemeMode = UserPreferenceRepository.ThemeMode.SYSTEM,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    // determine actual dark flag based on user choice
+    val resolvedDark = when (themeMode) {
+        UserPreferenceRepository.ThemeMode.LIGHT -> false
+        UserPreferenceRepository.ThemeMode.DARK -> true
+        UserPreferenceRepository.ThemeMode.SYSTEM -> darkTheme
+    }
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (resolvedDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
+        resolvedDark -> DarkColorScheme
         else -> LightColorScheme
     }
 

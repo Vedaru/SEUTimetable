@@ -17,6 +17,8 @@ import top.sakimidare.seutimetable.ui.theme.SEUTimetableTheme
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModelFactory
 import java.util.Locale
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 class MainActivity : ComponentActivity() {
 
@@ -55,8 +57,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
-            SEUTimetableTheme {
-                MainScreen(windowSizeClass,viewModel)
+
+            // observe theme preference inside Compose
+            val themeMode by prefRepository.themeModeFlow.collectAsState(initial = UserPreferenceRepository.ThemeMode.SYSTEM)
+
+            SEUTimetableTheme(themeMode = themeMode) {
+                MainScreen(windowSizeClass, viewModel)
             }
         }
     }

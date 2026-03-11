@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.sakimidare.seutimetable.R
+import top.sakimidare.seutimetable.data.model.ProfileItem
 import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
 import top.sakimidare.seutimetable.viewmodels.ProfileEvent
 import top.sakimidare.seutimetable.viewmodels.ProfileViewModel
@@ -62,13 +63,29 @@ fun ProfileScreen(
     )
 
     val state by profileViewModel.uiState.collectAsState()
+    // attach localized trailing text for theme entry
+    val sections = state.sections.map { section ->
+        val items = section.items.map { item ->
+            if (item is ProfileItem.Action && item.labelRes == R.string.theme_setting) {
+                val themeLabel = when (state.currentThemeMode) {
+                    UserPreferenceRepository.ThemeMode.LIGHT -> stringResource(R.string.light)
+                    UserPreferenceRepository.ThemeMode.DARK -> stringResource(R.string.dark)
+                    UserPreferenceRepository.ThemeMode.SYSTEM -> stringResource(R.string.follow_system)
+                }
+                item.copy(trailing = themeLabel)
+            } else item
+        }
+        section.copy(items = items)
+    }
     var showLanguagePicker by remember { mutableStateOf(false) }
+    var showThemePicker by remember { mutableStateOf(false) }
     var showAbout by remember { mutableStateOf(false) }
 
     LaunchedEffect(profileViewModel) {
         profileViewModel.events.collect { event ->
             when (event) {
                 is ProfileEvent.ShowLanguageDialog -> showLanguagePicker = true
+                is ProfileEvent.ShowThemeDialog -> showThemePicker = true
                 ProfileEvent.NavigateToTableManager -> TODO()
                 ProfileEvent.SyncData -> TODO()
                 ProfileEvent.ShowAbout -> showAbout = true
@@ -98,7 +115,7 @@ fun ProfileScreen(
             }
 
             items(
-                items = state.sections,
+                items = sections,
                 key = { it.titleRes ?: it.hashCode() }
             ) { section ->
                 ProfileSectionCard(
@@ -128,6 +145,17 @@ fun ProfileScreen(
                 showLanguagePicker = false
             },
             onDismiss = { showLanguagePicker = false }
+        )
+    }
+
+    if (showThemePicker) {
+        ThemePickerDialog(
+            currentMode = state.currentThemeMode,
+            onSelected = { mode ->
+                profileViewModel.updateThemeMode(mode)
+                showThemePicker = false
+            },
+            onDismiss = { showThemePicker = false }
         )
     }
 
@@ -213,6 +241,50 @@ fun AboutDialog(onDismiss: () -> Unit) {
                     text = stringResource(R.string.about_content),
                     style = MaterialTheme.typography.bodyLarge
                 )
+            }
+        }
+    )
+}
+
+@Composable
+fun ThemePickerDialog(
+    currentMode: UserPreferenceRepository.ThemeMode,
+    onSelected: (UserPreferenceRepository.ThemeMode) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = stringResource(R.string.theme_setting),
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(android.R.string.cancel))
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 0.dp)
+            ) {
+                val options = listOf(
+                    stringResource(R.string.follow_system) to UserPreferenceRepository.ThemeMode.SYSTEM,
+                    stringResource(R.string.light) to UserPreferenceRepository.ThemeMode.LIGHT,
+                    stringResource(R.string.dark) to UserPreferenceRepository.ThemeMode.DARK
+                )
+                options.forEach { (name, mode) ->
+                    val isSelected = mode == currentMode
+                    LanguageItem(
+                        name = name,
+                        isSelected = isSelected,
+                        onClick = { onSelected(mode) }
+                    )
+                }
             }
         }
     )
