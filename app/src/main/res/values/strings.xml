@@ -14,6 +14,10 @@
     <string name="decline_and_exit">Decline and Exit</string>
     <string name="timetable">Timetable</string>
     <string name="news">News</string>
+    <string name="news_notification_channel_name">Academic Affairs News</string>
+    <string name="news_notification_channel_desc">Notifications when the Academic Affairs Office posts updates</string>
+    <string name="news_notifications">AAO updates</string>
+    <string name="notification_settings">Notification settings</string>
     <string name="me">Me</string>
     <string name="current_week">Week %d</string>
     <string name="period_index">Period %d</string>

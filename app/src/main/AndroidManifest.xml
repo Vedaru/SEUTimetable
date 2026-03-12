@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- required on Android 13+ to post notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" tools:targetApi="tiramisu" />
     <application
         android:name="top.sakimidare.seutimetable.SEUTimetableApplication"
         android:allowBackup="true"

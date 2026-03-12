@@ -30,6 +30,7 @@ class UserPreferenceRepository(private val context: Context) {
         val SHOW_DATE_HEADER = booleanPreferencesKey("show_date_header") // 是否显示表头日期
         val SHOW_PERIOD_TIME = booleanPreferencesKey("show_period_time") // 是否显示具体时间点
         val SHOW_NON_CURRENT_WEEK = booleanPreferencesKey("show_non_current_week")
+        val NEWS_NOTIFICATIONS = booleanPreferencesKey("news_notifications")
         val THEME_MODE = androidx.datastore.preferences.core.intPreferencesKey("theme_mode")
     }
 
@@ -57,6 +58,11 @@ class UserPreferenceRepository(private val context: Context) {
        0 = Follow system (default), 1 = Light, 2 = Dark
     ------------------------------------------------------- */
     enum class ThemeMode { SYSTEM, LIGHT, DARK }
+
+    val newsNotificationFlow: Flow<Boolean> = dataFlow.map {
+        // default to enabled so users receive updates after granting permission
+        it[PreferencesKeys.NEWS_NOTIFICATIONS] ?: true
+    }
 
     val themeModeFlow: Flow<ThemeMode> = dataFlow.map {
         when (it[PreferencesKeys.THEME_MODE] ?: 0) {
@@ -115,6 +121,10 @@ class UserPreferenceRepository(private val context: Context) {
     // 定义更新方法
     suspend fun updateShowNonCurrentWeek(show: Boolean) {
         context.dataStore.edit { it[PreferencesKeys.SHOW_NON_CURRENT_WEEK] = show }
+    }
+
+    suspend fun updateNewsNotifications(enable: Boolean) {
+        context.dataStore.edit { it[PreferencesKeys.NEWS_NOTIFICATIONS] = enable }
     }
 }
 

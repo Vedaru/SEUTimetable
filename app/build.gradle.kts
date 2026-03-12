@@ -93,4 +93,6 @@ dependencies {
     implementation(libs.gson)
     ksp(libs.androidx.room.compiler)
     implementation(libs.kotlinx.serialization.json)
+    // WorkManager for periodic background news checks
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 }

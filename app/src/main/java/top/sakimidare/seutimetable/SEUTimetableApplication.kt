@@ -2,6 +2,8 @@ package top.sakimidare.seutimetable
 
 import android.app.Application
 import android.content.Context
+import top.sakimidare.seutimetable.notifications.NotificationHelper
+import top.sakimidare.seutimetable.notifications.NewsUpdateWorker
 
 /**
  * Application subclass.  No special language handling needed since the
@@ -19,5 +21,10 @@ class SEUTimetableApplication : Application() {
         // is primarily needed when components fetch resources directly from
         // applicationContext during startup (widgets, etc.).
         // no language overrides to apply
+
+        // create notification channel immediately so the worker can post later
+        NotificationHelper.createNotificationChannel(this)
+        // schedule background job to check for news updates
+        NewsUpdateWorker.schedule(this)
     }
 }

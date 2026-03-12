@@ -15,6 +15,10 @@
     <string name="decline_and_exit">拒否する</string>
     <string name="timetable">時間割</string>
     <string name="news">ニュース</string>
+    <string name="news_notification_channel_name">教務課ニュース</string>
+    <string name="news_notification_channel_desc">教務課からのお知らせが投稿されたときに通知します</string>
+    <string name="news_notifications">教務課の更新</string>
+    <string name="notification_settings">通知設定</string>
     <string name="me">マイ</string>
     <string name="current_week">第 %d 週</string>
     <string name="period_index">%d 限</string>

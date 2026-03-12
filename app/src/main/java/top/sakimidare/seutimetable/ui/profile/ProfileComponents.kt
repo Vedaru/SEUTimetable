@@ -153,29 +153,31 @@ fun ProfileListItem(item: ProfileItem) {
             Surface(
                 color = Color.Transparent
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    Text(
-                        text = stringResource(item.labelRes),
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.weight(1f)
-                    )
-                    // Material 3 Switch 实现
-                    androidx.compose.material3.Switch(
-                        checked = item.isChecked,
-                        onCheckedChange = { item.onToggle(it) } // 使用你的 onToggle 命名
-                    )
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            text = stringResource(item.labelRes),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.weight(1f)
+                        )
+                        // Material 3 Switch 实现
+                        androidx.compose.material3.Switch(
+                            checked = item.isChecked,
+                            onCheckedChange = { item.onToggle(it) } // 使用你的 onToggle 命名
+                        )
+                    }
                 }
             }
         }

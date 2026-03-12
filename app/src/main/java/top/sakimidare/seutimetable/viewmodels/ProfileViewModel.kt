@@ -28,7 +28,8 @@ class ProfileViewModel(
         prefRepository.showTimelineFlow,
         prefRepository.showDateFlow,
         prefRepository.showPeriodTimeFlow,
-        prefRepository.showNonCurrentWeekFlow
+        prefRepository.showNonCurrentWeekFlow,
+        prefRepository.newsNotificationFlow
     ) { flows: Array<Any?> ->
 
         val allTables = flows[0] as List<*>
@@ -39,6 +40,7 @@ class ProfileViewModel(
         val showDate = flows[5] as Boolean
         val showPeriodTime = flows[6] as Boolean
         val showNonCurrentWeek = flows[7] as Boolean
+        val notifyEnabled = flows[8] as Boolean
 
         ProfileItem.ProfileUiState(
             currentTableName = currentTable?.tableName ?: "",
@@ -86,6 +88,17 @@ class ProfileViewModel(
                         ) { checked ->
                             updatePreference { prefRepository.updateShowNonCurrentWeek(checked) }
                         }
+                    )
+                ),
+                // notification settings section
+                ProfileSection(
+                    titleRes = R.string.notification_settings,
+                    items = listOf(
+                        ProfileItem.Toggle(
+                            icon = Icons.Default.Notifications,
+                            labelRes = R.string.news_notifications,
+                            isChecked = notifyEnabled
+                        ) { checked -> updatePreference { prefRepository.updateNewsNotifications(checked) } }
                     )
                 ),
                 ProfileSection(

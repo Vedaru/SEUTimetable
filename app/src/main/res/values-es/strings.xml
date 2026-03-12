@@ -22,6 +22,10 @@
     <string name="decline_and_exit">Rechazar y salir</string>
     <string name="timetable">Horario</string>
     <string name="news">Noticias</string>
+    <string name="news_notification_channel_name">Noticias de la AAO</string>
+    <string name="news_notification_channel_desc">Notificaciones cuando la Oficina de Asuntos Académicos publica actualizaciones</string>
+    <string name="news_notifications">Actualizaciones AAO</string>
+    <string name="notification_settings">Configuración de notificaciones</string>
     <string name="me">Yo</string>
     <string name="current_week">Semana %d</string>
     <string name="period_index">Periodo %d</string>

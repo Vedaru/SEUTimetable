@@ -15,6 +15,10 @@
     <string name="decline_and_exit">拒绝并退出</string>
     <string name="timetable">课程表</string>
     <string name="news">资讯</string>
+    <string name="news_notification_channel_name">教务处资讯</string>
+    <string name="news_notification_channel_desc">当教务处资讯更新时发送通知</string>
+    <string name="news_notifications">教务处更新通知</string>
+    <string name="notification_settings">通知设置</string>
     <string name="me">我</string>
     <string name="current_week">第 %d 周</string>
     <string name="period_index">第 %d 节</string>
