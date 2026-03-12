@@ -24,7 +24,6 @@ class ProfileViewModel(
         timetableViewModel.allTables,
         timetableViewModel.currentTable,
         timetableViewModel.studyStatistics,
-        prefRepository.languageTagFlow, // 实时观察 DataStore 中的语言变化
         prefRepository.themeModeFlow,
         prefRepository.showTimelineFlow,
         prefRepository.showDateFlow,
@@ -35,18 +34,14 @@ class ProfileViewModel(
         val allTables = flows[0] as List<*>
         val currentTable = flows[1] as TableMetadata?
         val stats = flows[2] as Pair<*, *>
-        val langTag = flows[3] as String
-        val themeMode = flows[4] as UserPreferenceRepository.ThemeMode
-        val showTimeline = flows[5] as Boolean
-        val showDate = flows[6] as Boolean
-        val showPeriodTime = flows[7] as Boolean
-        val showNonCurrentWeek = flows[8] as Boolean
-
-        // currentLanguageTag is passed to UI, which will resolve a localized display name
+        val themeMode = flows[3] as UserPreferenceRepository.ThemeMode
+        val showTimeline = flows[4] as Boolean
+        val showDate = flows[5] as Boolean
+        val showPeriodTime = flows[6] as Boolean
+        val showNonCurrentWeek = flows[7] as Boolean
 
         ProfileItem.ProfileUiState(
             currentTableName = currentTable?.tableName ?: "",
-            currentLanguageTag = langTag,
             currentThemeMode = themeMode,
             completedLessons = stats.first as Int,
             totalHours = stats.second as Float,
@@ -57,12 +52,8 @@ class ProfileViewModel(
                         ProfileItem.Action(Icons.Default.Palette, R.string.theme_setting) {
                             sendEvent(ProfileEvent.ShowThemeDialog)
                         },
-                        // trailing string will be computed in composable using resources
-                        ProfileItem.Action(
-                            Icons.Default.Language,
-                            R.string.language_setting,
-                            null // placeholder, filled by UI
-                        ) {
+                        ProfileItem.Action(Icons.Default.Language, R.string.language_setting) {
+                            // show an in‑app dialog instead of launching a separate activity
                             sendEvent(ProfileEvent.ShowLanguageDialog)
                         }
                     )
@@ -112,18 +103,12 @@ class ProfileViewModel(
         initialValue = ProfileItem.ProfileUiState()
     )
 
-    // 2. 处理语言切换逻辑：写入持久化存储
+    // 2. 处理主题切换逻辑：写入持久化存储
     fun updateThemeMode(mode: UserPreferenceRepository.ThemeMode) {
         viewModelScope.launch { prefRepository.updateThemeMode(mode) }
     }
 
-    // 2.1 处理语言切换逻辑：写入持久化存储
-    fun updateLanguage(tag: String) {
-        if (tag == uiState.value.currentLanguageTag) return // 相同语言不处理
-        viewModelScope.launch {
-            prefRepository.updateLanguage(tag)
-        }
-    }
+    // language switching is now handled via the Profile screen dialog.
 
     // 3. 事件总线
     private val _events = MutableSharedFlow<ProfileEvent>()
@@ -155,9 +140,10 @@ class ProfileViewModel(
 }
 
 sealed class ProfileEvent {
-    object ShowLanguageDialog : ProfileEvent()
-    object ShowThemeDialog : ProfileEvent()
-    object NavigateToTableManager : ProfileEvent()
-    object SyncData : ProfileEvent()
-    object ShowAbout : ProfileEvent()
-}
+        object ShowThemeDialog : ProfileEvent()
+        // dialog used for picking a language inside the profile screen
+        object ShowLanguageDialog : ProfileEvent()
+        object NavigateToTableManager : ProfileEvent()
+        object SyncData : ProfileEvent()
+        object ShowAbout : ProfileEvent()
+    }

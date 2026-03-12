@@ -8,7 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import kotlinx.coroutines.runBlocking
+import androidx.lifecycle.lifecycleScope
 import top.sakimidare.seutimetable.data.local.AppDatabase
 import top.sakimidare.seutimetable.data.repository.CourseRepository
 import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
@@ -16,29 +16,17 @@ import top.sakimidare.seutimetable.ui.main.MainScreen
 import top.sakimidare.seutimetable.ui.theme.SEUTimetableTheme
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModelFactory
-import java.util.Locale
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
 class MainActivity : ComponentActivity() {
 
     override fun attachBaseContext(newBase: Context) {
-        val lang = runBlocking { UserPreferenceRepository(newBase).getLanguageTag() }
-        if (lang.isEmpty()) {
-            super.attachBaseContext(newBase)
-            return
-        }
-
-        val locale = Locale.forLanguageTag(lang)
-        Locale.setDefault(locale)
-
-        val config = newBase.resources.configuration
-        config.setLocale(locale)
-        val context = newBase.createConfigurationContext(config)
-
-        super.attachBaseContext(context)
+        // Activity context must also reflect the persisted locale, otherwise
+        // the first screen may render in the wrong language after a cold
+        // start with an override in shared prefs.
+        super.attachBaseContext(LocaleManager.applySavedLanguage(newBase))
     }
-
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()

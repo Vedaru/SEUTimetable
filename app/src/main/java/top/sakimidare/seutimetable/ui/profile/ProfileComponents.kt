@@ -103,7 +103,10 @@ fun ProfileListItem(item: ProfileItem) {
     when (item) {
         is ProfileItem.Action -> {
             Surface(
-                onClick = item.onClick,
+                onClick = {
+                    android.util.Log.d("ProfileComponents", "action clicked: ${item.labelRes}")
+                    item.onClick()
+                },
                 color = Color.Transparent
             ) {
                 Row(

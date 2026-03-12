@@ -128,16 +128,11 @@
     <string name="settings">設定</string>
     <string name="appearance_theme">外観テーマ</string>
     <string name="widget_settings">ウィジェット設定</string>
-    <string name="language_setting">言語</string>
     <string name="about_app">アプリについて</string>
     <string name="welcome_user">こんにちは！</string>
     <string name="study_statistics">今学期、あなたはすでに %1$d クラスに出席しており、合計 %2$.2f 時間です。</string>
     <string name="follow_system">システム設定に従う</string>
     <!-- 言語表示名（各言語名を保持） -->
-    <string name="lang_simplified_chinese">简体中文</string>
-    <string name="lang_english">English</string>
-    <string name="lang_japanese">日本語</string>
-    <string name="lang_spanish">Español</string>
     <string name="theme_setting">テーマ</string>
     <string name="light">ライト</string>
     <string name="dark">ダーク</string>
@@ -148,4 +143,5 @@
     <string name="show_non_current_week">今週以外のコースを表示</string>
     <string name="general_settings">一般設定</string>
     <string name="about_content">TODO</string>
+    <string name="language_setting">言語</string>
 </resources>

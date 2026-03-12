@@ -13,14 +13,17 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import java.util.Locale
+import top.sakimidare.seutimetable.R
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_prefs")
 
 class UserPreferenceRepository(private val context: Context) {
 
+    // language switching removed; application will always follow system locale
+
     private object PreferencesKeys {
         val DISCLAIMER_ACCEPTED = booleanPreferencesKey("disclaimer_accepted")
-        val LANGUAGE_TAG = stringPreferencesKey("language_tag")
 
         // --- 新增：全局显示设置的 Key ---
         val SHOW_TIMELINE = booleanPreferencesKey("show_timeline")       // 是否显示侧边节次轴
@@ -43,21 +46,7 @@ class UserPreferenceRepository(private val context: Context) {
         context.dataStore.edit { it[PreferencesKeys.DISCLAIMER_ACCEPTED] = accepted }
     }
 
-    /* -------------------------------------------------------
-       1. 语言设置 (修正默认值为 "" 以支持跟随系统)
-    ------------------------------------------------------- */
-
-    val languageTagFlow: Flow<String> = dataFlow.map { it[PreferencesKeys.LANGUAGE_TAG] ?: "" }
-
-    suspend fun getLanguageTag(): String {
-        return try {
-            context.dataStore.data.first()[PreferencesKeys.LANGUAGE_TAG] ?: ""
-        } catch (e: Exception) { "" }
-    }
-
-    suspend fun updateLanguage(tag: String) {
-        context.dataStore.edit { it[PreferencesKeys.LANGUAGE_TAG] = tag }
-    }
+    // language preferences removed; nothing stored or observed
 
     /* -------------------------------------------------------
        2. 全局显示设置 (新增)

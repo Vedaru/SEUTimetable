@@ -1,6 +1,5 @@
 package top.sakimidare.seutimetable.ui.profile
 
-import android.app.Activity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,19 +39,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import top.sakimidare.seutimetable.R
 import top.sakimidare.seutimetable.data.model.ProfileItem
 import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
+import top.sakimidare.seutimetable.LocaleManager
 import top.sakimidare.seutimetable.viewmodels.ProfileEvent
 import top.sakimidare.seutimetable.viewmodels.ProfileViewModel
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
 
-@Composable
-fun localeNameForCode(code: String): String {
-    return when {
-        code.startsWith("ja", true) -> stringResource(R.string.lang_japanese)
-        code.startsWith("zh", true) -> stringResource(R.string.lang_simplified_chinese)
-        code.startsWith("es", true) -> stringResource(R.string.lang_spanish)
-        else -> stringResource(R.string.lang_english)
-    }
-}
 
 @Composable
 fun ProfileScreen(
@@ -76,7 +66,7 @@ fun ProfileScreen(
     val state by profileViewModel.uiState.collectAsState()
 
 
-    // no longer show system language outside; keep follow-system literal
+    
 
     // attach localized trailing text for theme and language entries
     val sections = state.sections.map { section ->
@@ -91,33 +81,36 @@ fun ProfileScreen(
                     item.copy(trailing = themeLabel)
                 }
                 item is ProfileItem.Action && item.labelRes == R.string.language_setting -> {
-                    // convert current tag into a localized display name; empty tag => follow system literal
-                    val langLabel = when {
-                        state.currentLanguageTag.isEmpty() -> stringResource(R.string.follow_system)
-                        state.currentLanguageTag.contains("ja", ignoreCase = true) -> stringResource(R.string.lang_japanese)
-                        state.currentLanguageTag.contains("zh", ignoreCase = true) -> stringResource(R.string.lang_simplified_chinese)
-                        state.currentLanguageTag.contains("es", ignoreCase = true) -> stringResource(R.string.lang_spanish)
-                        else -> stringResource(R.string.lang_english)
+                    val lang = LocaleManager.getLanguage(context)
+                    val label = if (lang == LocaleManager.Language.SYSTEM) {
+                        stringResource(R.string.follow_system)
+                    } else {
+                        lang.displayName(context)
                     }
-                    item.copy(trailing = langLabel)
+                    item.copy(trailing = label)
                 }
                 else -> item
             }
         }
         section.copy(items = items)
     }
-    var showLanguagePicker by remember { mutableStateOf(false) }
+    // state flags for modal dialogs
     var showThemePicker by remember { mutableStateOf(false) }
+    var showLanguagePicker by remember { mutableStateOf(false) }
     var showAbout by remember { mutableStateOf(false) }
 
     LaunchedEffect(profileViewModel) {
         profileViewModel.events.collect { event ->
             when (event) {
-                is ProfileEvent.ShowLanguageDialog -> showLanguagePicker = true
                 is ProfileEvent.ShowThemeDialog -> showThemePicker = true
-                ProfileEvent.NavigateToTableManager -> TODO()
-                ProfileEvent.SyncData -> TODO()
-                ProfileEvent.ShowAbout -> showAbout = true
+                is ProfileEvent.ShowLanguageDialog -> showLanguagePicker = true
+                is ProfileEvent.ShowAbout -> showAbout = true
+                is ProfileEvent.NavigateToTableManager -> {
+                    // TODO: Implement navigation to Table Manager
+                }
+                is ProfileEvent.SyncData -> {
+                    // TODO: Implement sync data
+                }
             }
         }
     }
@@ -159,23 +152,7 @@ fun ProfileScreen(
         }
     }
 
-    if (showLanguagePicker) {
-        LanguagePickerDialog(
-            currentTag = state.currentLanguageTag,
-            onSelected = { tag ->
-                profileViewModel.updateLanguage(tag)
-                (context as? Activity)?.let { activity ->
-                    val intent = activity.intent
-                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
-                    activity.startActivity(intent)
-                    activity.finish()
-                }
-                showLanguagePicker = false
-            },
-            onDismiss = { showLanguagePicker = false }
-        )
-    }
 
     if (showThemePicker) {
         ThemePickerDialog(
@@ -188,26 +165,55 @@ fun ProfileScreen(
         )
     }
 
+    if (showLanguagePicker) {
+        // mirror the separate SettingsActivity UI inside a dialog
+        val currentLang = LocaleManager.getLanguage(context)
+        LanguagePickerDialog(
+            current = currentLang,
+            onSelected = { lang ->
+                LocaleManager.setLanguage(context, lang)
+                // apply locale change by recreating the current activity.
+                // LocalContext.current can be a wrapper so try to unwrap it.
+                // try to find the enclosing Activity by peeling off wrappers
+                var activity: android.app.Activity? = null
+                var ctx: android.content.Context? = context
+                while (ctx is android.content.ContextWrapper && activity == null) {
+                    if (ctx is android.app.Activity) {
+                        activity = ctx
+                    } else {
+                        ctx = ctx.baseContext
+                    }
+                }
+                activity?.recreate()
+                showLanguagePicker = false
+            },
+            onDismiss = { showLanguagePicker = false }
+        )
+    }
+
     if (showAbout) {
         AboutDialog(onDismiss = { showAbout = false })
     }
 }
 
+// --- generic option dialog ------------------------------------------------
 @Composable
-fun LanguagePickerDialog(
-    currentTag: String,
-    onSelected: (String) -> Unit,
+fun <T> OptionPickerDialog(
+    titleRes: Int,
+    options: List<Pair<String, T>>,
+    currentSelection: T,
+    onSelected: (T) -> Unit,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = stringResource(R.string.language_setting),
-                style = MaterialTheme.typography.titleLarge // 稍微调小一点，更精致
+                text = stringResource(titleRes),
+                style = MaterialTheme.typography.titleLarge
             )
         },
-        confirmButton = {}, // 通常单选对话框不需要确定按钮，点选即关闭
+        confirmButton = {},
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text(stringResource(android.R.string.cancel))
@@ -217,36 +223,24 @@ fun LanguagePickerDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 0.dp) // 减少内边距
+                    .padding(vertical = 0.dp)
             ) {
-                // compute system language name for trailing label only
-                val configuration = LocalConfiguration.current
-                val systemLangName = localeNameForCode(configuration.locales[0].language ?: "")
-                val languages = listOf(
-                    stringResource(R.string.follow_system) to "",
-                    stringResource(R.string.lang_simplified_chinese) to "zh-CN",
-                    stringResource(R.string.lang_english) to "en",
-                    stringResource(R.string.lang_japanese) to "ja",
-                    stringResource(R.string.lang_spanish) to "es"
-                )
-
-                languages.forEach { (name, tag) ->
-                    val isSelected = if (tag.isEmpty()) {
-                        currentTag.isEmpty() // 如果 tag 为空，检查当前 tag 是否也为空
-                    } else {
-                        currentTag.startsWith(tag.split("-")[0]) && currentTag.isNotEmpty()
-                    }
-
-                    LanguageItem(
+                options.forEach { (name, value) ->
+                    val isSelected = value == currentSelection
+                    OptionItem(
                         name = name,
                         isSelected = isSelected,
-                        onClick = { onSelected(tag) }
+                        onClick = {
+                            android.util.Log.d("ProfileScreen", "option clicked: $value")
+                            onSelected(value)
+                        }
                     )
                 }
             }
         }
     )
 }
+
 
 @Composable
 fun AboutDialog(onDismiss: () -> Unit) {
@@ -285,46 +279,40 @@ fun ThemePickerDialog(
     onSelected: (UserPreferenceRepository.ThemeMode) -> Unit,
     onDismiss: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = stringResource(R.string.theme_setting),
-                style = MaterialTheme.typography.titleLarge
-            )
-        },
-        confirmButton = {},
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(android.R.string.cancel))
-            }
-        },
-        text = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 0.dp)
-            ) {
-                val options = listOf(
-                    stringResource(R.string.follow_system) to UserPreferenceRepository.ThemeMode.SYSTEM,
-                    stringResource(R.string.light) to UserPreferenceRepository.ThemeMode.LIGHT,
-                    stringResource(R.string.dark) to UserPreferenceRepository.ThemeMode.DARK
-                )
-                options.forEach { (name, mode) ->
-                    val isSelected = mode == currentMode
-                    LanguageItem(
-                        name = name,
-                        isSelected = isSelected,
-                        onClick = { onSelected(mode) }
-                    )
-                }
-            }
-        }
+    val options = listOf(
+        stringResource(R.string.follow_system) to UserPreferenceRepository.ThemeMode.SYSTEM,
+        stringResource(R.string.light) to UserPreferenceRepository.ThemeMode.LIGHT,
+        stringResource(R.string.dark) to UserPreferenceRepository.ThemeMode.DARK
+    )
+    OptionPickerDialog<UserPreferenceRepository.ThemeMode>(
+        titleRes = R.string.theme_setting,
+        options = options,
+        currentSelection = currentMode,
+        onSelected = onSelected,
+        onDismiss = onDismiss
     )
 }
 
 @Composable
-private fun LanguageItem(
+fun LanguagePickerDialog(
+    current: LocaleManager.Language,
+    onSelected: (LocaleManager.Language) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val options = LocaleManager.Language.values().map { lang ->
+        lang.displayName(LocalContext.current) to lang
+    }
+    OptionPickerDialog<LocaleManager.Language>(
+        titleRes = R.string.language_setting,
+        options = options,
+        currentSelection = current,
+        onSelected = onSelected,
+        onDismiss = onDismiss
+    )
+}
+
+@Composable
+private fun OptionItem(
     name: String,
     isSelected: Boolean,
     onClick: () -> Unit

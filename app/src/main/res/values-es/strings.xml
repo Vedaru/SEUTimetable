@@ -135,16 +135,11 @@
     <string name="settings">Configuración</string>
     <string name="appearance_theme">Tema de apariencia</string>
     <string name="widget_settings">Configuración del widget</string>
-    <string name="language_setting">Idioma</string>
     <string name="about_app">Acerca de la aplicación</string>
     <string name="welcome_user">¡Hola!</string>
     <string name="study_statistics">Este semestre ya has asistido a %1$d clases, un total de %2$.2f horas.</string>
     <string name="follow_system">Seguir sistema</string>
     <!-- nombres de idioma (mantener idioma nativo) -->
-    <string name="lang_simplified_chinese">简体中文</string>
-    <string name="lang_english">English</string>
-    <string name="lang_japanese">日本語</string>
-    <string name="lang_spanish">Español</string>
     <string name="theme_setting">Tema</string>
     <string name="light">Claro</string>
     <string name="dark">Oscuro</string>
@@ -155,4 +150,5 @@
     <string name="show_non_current_week">Mostrar cursos fuera de la semana actual</string>
     <string name="general_settings">Ajustes generales</string>
     <string name="about_content">Aquí va el texto sobre la aplicación (TODO)</string>
+    <string name="language_setting">Idioma</string>
 </resources>
