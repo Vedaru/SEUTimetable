@@ -2,6 +2,7 @@ package top.sakimidare.seutimetable
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,7 +14,9 @@ import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
 import top.sakimidare.seutimetable.data.local.AppDatabase
 import top.sakimidare.seutimetable.data.repository.CourseRepository
@@ -24,7 +27,6 @@ import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModelFactory
 import top.sakimidare.seutimetable.viewmodels.MainViewModel
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 
 class MainActivity : ComponentActivity() {
 
@@ -32,6 +34,8 @@ class MainActivity : ComponentActivity() {
         const val EXTRA_TARGET_TAB = "extra_target_tab"
         const val TAB_NEWS = "news"
     }
+
+    private var pendingTargetTab by mutableStateOf<String?>(null)
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -55,6 +59,8 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        pendingTargetTab = intent?.getStringExtra(EXTRA_TARGET_TAB)
+
         val prefRepository = UserPreferenceRepository(applicationContext)
         val database = AppDatabase.getDatabase(applicationContext)
         val courseRepository = CourseRepository(
@@ -68,14 +74,12 @@ class MainActivity : ComponentActivity() {
         }
         val mainViewModel: MainViewModel by viewModels()
 
-        val initialTab = intent?.getStringExtra(EXTRA_TARGET_TAB)
-
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
 
             // observe theme preference inside Compose
             val themeMode by prefRepository.themeModeFlow.collectAsState(initial = UserPreferenceRepository.ThemeMode.SYSTEM)
-            val target = remember { initialTab }
+            val target = pendingTargetTab
             LaunchedEffect(target) {
                 if (target == TAB_NEWS) {
                     mainViewModel.updateTab(MainTab.News)
@@ -86,5 +90,11 @@ class MainActivity : ComponentActivity() {
                 MainScreen(windowSizeClass, timetableViewModel, mainViewModel)
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        pendingTargetTab = intent.getStringExtra(EXTRA_TARGET_TAB)
     }
 }
