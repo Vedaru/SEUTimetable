@@ -5,8 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +34,8 @@ import java.time.temporal.ChronoUnit
 
 private const val TAG = "TimetableViewModel"
 
-class TimetableViewModel(
+@HiltViewModel
+class TimetableViewModel @Inject constructor(
     private val courseRepository: CourseRepository,
     private val prefRepository: UserPreferenceRepository
 ) : ViewModel() {
@@ -330,6 +332,13 @@ class TimetableViewModel(
         }
     }
 
+    /** 手动刷新小组件 */
+    fun refreshWidgets() {
+        viewModelScope.launch {
+            courseRepository.notifyWidgetUpdate()
+        }
+    }
+
     fun removeCourse(courseId: Long) = viewModelScope.launch {
         courseRepository.deleteCourseById(courseId)
     }
@@ -428,18 +437,4 @@ class TimetableViewModel(
     }
 }
 
-// --- Factory ---
 
-class TimetableViewModelFactory(
-    private val courseRepository: CourseRepository,
-    private val prefRepository: UserPreferenceRepository // 💡 必须添加
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(TimetableViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            // 💡 传入两个 Repository
-            return TimetableViewModel(courseRepository, prefRepository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}

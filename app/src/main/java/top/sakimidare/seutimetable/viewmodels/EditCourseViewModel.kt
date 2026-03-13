@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import top.sakimidare.seutimetable.data.model.Course
 import top.sakimidare.seutimetable.data.model.TableMetadata

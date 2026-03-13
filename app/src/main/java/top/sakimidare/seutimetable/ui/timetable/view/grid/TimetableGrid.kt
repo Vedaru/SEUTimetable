@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -26,8 +27,8 @@ import java.time.DayOfWeek
 import java.util.Locale
 
 private val mockCourse = Course(
-    id = 0,
-    tableId = 0,
+    id = 0L,
+    tableId = 0L,
     name = "测试课程",
     teacher = "老师",
     location = "地点",

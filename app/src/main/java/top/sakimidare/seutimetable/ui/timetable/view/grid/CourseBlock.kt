@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,8 +22,8 @@ import top.sakimidare.seutimetable.data.model.WeekRule
 import java.time.DayOfWeek
 
 private val mockCourse = Course(
-    id = 0,
-    tableId = 0,
+    id = 0L,
+    tableId = 0L,
     name = "测试课程",
     teacher = "老师",
     location = "地点",

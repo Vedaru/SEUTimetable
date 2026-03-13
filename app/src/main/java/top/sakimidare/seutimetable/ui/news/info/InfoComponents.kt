@@ -65,7 +65,9 @@ import top.sakimidare.seutimetable.viewmodels.NewsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoContents(
     modifier: Modifier,
@@ -289,69 +291,52 @@ fun NewsList(
         )
     }
 }
+
 @Composable
 fun InfoCard(
     text: String,
     date: String = "",
     onClick: () -> Unit
 ) {
-    val daysAgo = remember(date) { getDaysAgo(date) }
-    val isFresh = daysAgo <= 14L
-
+    val formatted = remember(date) { formatNewsDate(date, Locale.getDefault()) }
     Card(
-        onClick = onClick,
         modifier = Modifier
-            .fillMaxWidth()
-            .height(130.dp),
-        // 增加一点动态阴影效果
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isFresh) 4.dp else 2.dp,
-            pressedElevation = 6.dp
-        ),
-        border = null,
+            .fillMaxWidth(),
+        onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
         )
     ) {
         Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // 1. 标题：最多显示三行，超出部分省略号
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleMedium,
-                color = if (isFresh) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                fontWeight = if(isFresh) FontWeight.Bold else FontWeight.Normal,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
-
-            // 2. 日期：如果日期不为空，显示在右下方
-            if (date.isNotEmpty()) {
-                Text(
-                    text = date,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.align(Alignment.End),
-                    maxLines = 1 // 确保日期不换行
-                )
-            }
+            Text(
+                text = formatted,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
 
-
-private fun getDaysAgo(dateString: String): Long {
+private fun formatNewsDate(dateStr: String, locale: Locale): String {
     return try {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val itemDate = LocalDate.parse(dateString, formatter)
-        val today = LocalDate.now()
-        ChronoUnit.DAYS.between(itemDate, today)
+        val date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE)
+        val formatter = when (locale.language) {
+            "zh" -> DateTimeFormatter.ofPattern("M月d日", locale)
+            else -> DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM).withLocale(locale)
+        }
+        date.format(formatter)
     } catch (e: Exception) {
-        Log.e("NewsViewModel", "Error parsing date: $dateString", e)
-        999L // 解析失败则视为旧闻
+        // fallback to raw string if parsing fails
+        dateStr
     }
 }

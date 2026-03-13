@@ -2,6 +2,7 @@ package top.sakimidare.seutimetable.data.parser
 
 import android.util.Log
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import org.json.JSONArray
 import org.json.JSONObject
 import top.sakimidare.seutimetable.data.model.Course
@@ -149,7 +150,7 @@ object TableParserUtils {
             val dayOfWeek = if (dayValue in 1..7) DayOfWeek.of(dayValue) else DayOfWeek.MONDAY
 
             Course(
-                id = 0,
+                id = 0L,
                 name = courseName,
                 teacher = obj.optString("SKJS").cleanRaw(),
                 location = obj.optString("JASMC").cleanRaw(),

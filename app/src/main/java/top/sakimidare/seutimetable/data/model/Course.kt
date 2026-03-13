@@ -28,7 +28,8 @@ data class Course(
     val color: Color,
     val weekRule: WeekRule = WeekRule.All,
     val note: String,
-){
+) {
+
     /**
      * 判断当前课程是否与另一个课程存在“时空冲突”
      * * @param other 另一个课程对象

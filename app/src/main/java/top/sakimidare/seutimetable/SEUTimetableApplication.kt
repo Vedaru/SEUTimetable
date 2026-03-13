@@ -2,6 +2,7 @@ package top.sakimidare.seutimetable
 
 import android.app.Application
 import android.content.Context
+import dagger.hilt.android.HiltAndroidApp
 import top.sakimidare.seutimetable.notifications.NotificationHelper
 import top.sakimidare.seutimetable.notifications.NewsUpdateWorker
 
@@ -9,6 +10,7 @@ import top.sakimidare.seutimetable.notifications.NewsUpdateWorker
  * Application subclass.  No special language handling needed since the
  * app always follows the system locale.
  */
+@HiltAndroidApp
 class SEUTimetableApplication : Application() {
     override fun attachBaseContext(base: Context) {
         // ensure stored override (if any) is applied before any UI loads

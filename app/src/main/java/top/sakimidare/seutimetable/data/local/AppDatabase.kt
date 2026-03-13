@@ -28,7 +28,10 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "timetable_database"
-                ).build()
+                )
+                    // 如果数据库结构变更且未提供 Migration，则安全地重建数据库
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

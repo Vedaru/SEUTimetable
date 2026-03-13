@@ -4,16 +4,18 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hiltAndroid)
+    kotlin("kapt")
 }
 
 android {
     namespace = "top.sakimidare.seutimetable"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "top.sakimidare.seutimetable"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -95,4 +97,12 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     // WorkManager for periodic background news checks
     implementation("androidx.work:work-runtime-ktx:2.8.1")
+
+    // Hilt DI
+    implementation(libs.hiltAndroid)
+    kapt(libs.hiltCompiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }

@@ -1,5 +1,6 @@
 package top.sakimidare.seutimetable.ui.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +41,7 @@ import top.sakimidare.seutimetable.R
 import top.sakimidare.seutimetable.data.model.ProfileItem
 import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
 import top.sakimidare.seutimetable.LocaleManager
+import top.sakimidare.seutimetable.notifications.NewsUpdateWorker
 import top.sakimidare.seutimetable.viewmodels.ProfileEvent
 import top.sakimidare.seutimetable.viewmodels.ProfileViewModel
 import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
@@ -64,9 +66,6 @@ fun ProfileScreen(
     )
 
     val state by profileViewModel.uiState.collectAsState()
-
-
-    
 
     // attach localized trailing text for theme and language entries
     val sections = state.sections.map { section ->
@@ -152,8 +151,6 @@ fun ProfileScreen(
         }
     }
 
-
-
     if (showThemePicker) {
         ThemePickerDialog(
             currentMode = state.currentThemeMode,
@@ -166,15 +163,11 @@ fun ProfileScreen(
     }
 
     if (showLanguagePicker) {
-        // mirror the separate SettingsActivity UI inside a dialog
         val currentLang = LocaleManager.getLanguage(context)
         LanguagePickerDialog(
             current = currentLang,
             onSelected = { lang ->
                 LocaleManager.setLanguage(context, lang)
-                // apply locale change by recreating the current activity.
-                // LocalContext.current can be a wrapper so try to unwrap it.
-                // try to find the enclosing Activity by peeling off wrappers
                 var activity: android.app.Activity? = null
                 var ctx: android.content.Context? = context
                 while (ctx is android.content.ContextWrapper && activity == null) {
@@ -249,7 +242,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
         title = {
             Text(
                 text = stringResource(R.string.about_app),
-                style = MaterialTheme.typography.titleLarge // 稍微调小一点，更精致
+                style = MaterialTheme.typography.titleLarge
             )
         },
         confirmButton = {},
@@ -262,7 +255,7 @@ fun AboutDialog(onDismiss: () -> Unit) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 0.dp) // 减少内边距
+                    .padding(vertical = 0.dp)
             ) {
                 Text(
                     text = stringResource(R.string.about_content),

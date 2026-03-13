@@ -17,18 +17,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.lifecycleScope
-import top.sakimidare.seutimetable.data.local.AppDatabase
-import top.sakimidare.seutimetable.data.repository.CourseRepository
-import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
+import dagger.hilt.android.AndroidEntryPoint
 import top.sakimidare.seutimetable.ui.main.MainScreen
 import top.sakimidare.seutimetable.ui.theme.SEUTimetableTheme
-import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
-import top.sakimidare.seutimetable.viewmodels.TimetableViewModelFactory
+import top.sakimidare.seutimetable.data.repository.UserPreferenceRepository
 import top.sakimidare.seutimetable.viewmodels.MainViewModel
+import top.sakimidare.seutimetable.viewmodels.TimetableViewModel
 import androidx.compose.runtime.collectAsState
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var prefRepository: UserPreferenceRepository
 
     companion object {
         const val EXTRA_TARGET_TAB = "extra_target_tab"
@@ -61,17 +63,7 @@ class MainActivity : ComponentActivity() {
 
         pendingTargetTab = intent?.getStringExtra(EXTRA_TARGET_TAB)
 
-        val prefRepository = UserPreferenceRepository(applicationContext)
-        val database = AppDatabase.getDatabase(applicationContext)
-        val courseRepository = CourseRepository(
-            courseDao = database.courseDao(),
-            tableDao = database.tableDao(),
-            context = applicationContext
-        )
-
-        val timetableViewModel: TimetableViewModel by viewModels {
-            TimetableViewModelFactory(courseRepository, prefRepository)
-        }
+        val timetableViewModel: TimetableViewModel by viewModels()
         val mainViewModel: MainViewModel by viewModels()
 
         setContent {

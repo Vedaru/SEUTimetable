@@ -64,10 +64,10 @@ class TimetableConverters {
 
     /* ---------- 颜色转换 ---------- */
     @TypeConverter
-    fun fromColor(color: Color): Int = color.toArgb()
+    fun fromColor(color: Color): Long = color.toArgb().toLong()
 
     @TypeConverter
-    fun toColor(colorInt: Int): Color = Color(colorInt)
+    fun toColor(colorLong: Long): Color = Color(colorLong)
 
     /* ---------- 周规则转换 ---------- */
     @TypeConverter

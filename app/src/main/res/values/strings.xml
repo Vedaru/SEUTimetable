@@ -117,6 +117,7 @@
     <string name="loading_failed_prefix">Loading failed</string>
     <string name="not_in_current_week">Not in Current Week</string>
     <string name="today">Today</string>
+    <string name="days_ago">%1$d days ago</string>
     <string name="next_course">Next Course</string>
     <string name="upcoming">Upcoming</string>
     <string name="having_lesson">In Progress</string>

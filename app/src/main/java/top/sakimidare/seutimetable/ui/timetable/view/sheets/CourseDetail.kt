@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -90,8 +91,8 @@ fun CourseDetailSheet(
 }
 
 private val mockCourse = Course(
-    id = 0,
-    tableId = 0,
+    id = 0L,
+    tableId = 0L,
     name = "123456789123456789123456789123456789123456789",
     teacher = "老师",
     location = "地点",

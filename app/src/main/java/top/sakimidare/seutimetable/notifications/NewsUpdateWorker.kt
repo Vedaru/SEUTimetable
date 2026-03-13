@@ -2,6 +2,7 @@ package top.sakimidare.seutimetable.notifications
 
 import android.content.Context
 import androidx.work.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -68,6 +69,8 @@ class NewsUpdateWorker(
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
                 )
+                // provide a small backoff to avoid rapid retries if the network is unstable
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
                 .build()
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
@@ -77,9 +80,28 @@ class NewsUpdateWorker(
             )
         }
 
+        /**
+         * Trigger an immediate check for the latest news, bypassing the periodic schedule.
+         */
+        fun requestImmediateUpdate(context: Context) {
+            val workRequest = OneTimeWorkRequestBuilder<NewsUpdateWorker>()
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
+                .build()
+
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                "${WORK_NAME}_immediate",
+                ExistingWorkPolicy.REPLACE,
+                workRequest
+            )
+        }
+
         private fun prime(context: Context) {
             // fetch current headlines and mark as seen without notifying
-            kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
                 try {
                     val newsSource = NewsConfigs.JWC
                     for (cat in newsSource.categories) {
